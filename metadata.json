@@ -1,0 +1,6 @@
+{
+  "name": "Apex Academy of Professional Education",
+  "description": "Premium UK professional education & training academy offering accredited courses in Security, Construction, Healthcare, Business, and Higher Education pathways.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
