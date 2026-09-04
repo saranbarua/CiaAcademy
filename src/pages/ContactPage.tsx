@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from "react";
+import { motion } from "motion/react";
 import {
   MapPin,
   Phone,
@@ -9,24 +9,122 @@ import {
   CheckCircle2,
   Building,
   Navigation,
-  Train
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
+  Train,
+  Loader2,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import apiurl from "../apiUrl/apiUrl";
+
+const API_BASE = apiurl.mainUrl;
+
+interface LeadPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  source: string;
+  courseInterest: string;
+}
+
+async function submitLead(payload: LeadPayload) {
+  const res = await fetch(`${API_BASE}/leads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let msg = "Something went wrong. Please try again.";
+    try {
+      const body = await res.json();
+      msg = body.error || body.message || msg;
+    } catch {
+      // ignore
+    }
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+function splitName(fullName: string) {
+  const trimmed = fullName.trim().replace(/\s+/g, " ");
+  const parts = trimmed.split(" ");
+  const firstName = parts.shift() || trimmed;
+  const lastName = parts.join(" ") || firstName;
+  return { firstName, lastName };
+}
 
 export const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    subject: 'Course Enrolment Query',
-    message: ''
+    fullName: "",
+    email: "",
+    phone: "",
+    subject: "Course Enrolment Query",
+    message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError(null);
+
+    if (!formData.fullName.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (!formData.email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+    if (!formData.phone.trim()) {
+      setError("Please enter your phone number.");
+      return;
+    }
+    if (!formData.message.trim()) {
+      setError("Please enter a message.");
+      return;
+    }
+
+    const { firstName, lastName } = splitName(formData.fullName);
+
+    setSubmitting(true);
+    try {
+      await submitLead({
+        firstName,
+        lastName,
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        subject: formData.subject,
+        message: formData.message.trim(),
+        source: "WEBSITE",
+        courseInterest: formData.subject,
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not send your message. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      subject: "Course Enrolment Query",
+      message: "",
+    });
+    setSubmitted(false);
+    setError(null);
   };
 
   return (
@@ -39,7 +137,7 @@ export const ContactPage: React.FC = () => {
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Contact Us & Campus' }]} />
+        <Breadcrumbs items={[{ label: "Contact Us & Campus" }]} />
 
         {/* Hero */}
         <section className="py-12 bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -52,7 +150,8 @@ export const ContactPage: React.FC = () => {
                 Get in Touch with Apex Academy
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Have questions about our qualifications, batch timetables, or admissions? Our team is here to assist.
+                Have questions about our qualifications, batch timetables, or
+                admissions? Our team is here to assist.
               </p>
             </div>
           </div>
@@ -71,32 +170,57 @@ export const ContactPage: React.FC = () => {
                   <div className="flex items-start space-x-3">
                     <MapPin className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-slate-900 dark:text-white block">Campus Address:</strong>
-                      <span>Apex Education Campus, 45 Commercial Road, London E1 1LA, United Kingdom</span>
+                      <strong className="text-slate-900 dark:text-white block">
+                        Campus Address:
+                      </strong>
+                      <span>
+                        Apex Education Campus, 45 Commercial Road, London E1
+                        1LA, United Kingdom
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <Phone className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-slate-900 dark:text-white block">Admissions Helplines:</strong>
-                      <span>+44 (0) 20 8123 4567<br />+44 (0) 7912 345678 (WhatsApp Support)</span>
+                      <strong className="text-slate-900 dark:text-white block">
+                        Admissions Helplines:
+                      </strong>
+                      <span>
+                        +44 (0) 20 8123 4567
+                        <br />
+                        +44 (0) 7912 345678 (WhatsApp Support)
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <Mail className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-slate-900 dark:text-white block">Email Inquiries:</strong>
-                      <span>admissions@apexacademy.ac.uk<br />info@apexacademy.ac.uk</span>
+                      <strong className="text-slate-900 dark:text-white block">
+                        Email Inquiries:
+                      </strong>
+                      <span>
+                        admissions@apexacademy.ac.uk
+                        <br />
+                        info@apexacademy.ac.uk
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-3">
                     <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-slate-900 dark:text-white block">Opening Hours:</strong>
-                      <span>Monday – Friday: 09:00 – 18:00<br />Saturday: 10:00 – 16:00<br />Sunday: Closed</span>
+                      <strong className="text-slate-900 dark:text-white block">
+                        Opening Hours:
+                      </strong>
+                      <span>
+                        Monday – Friday: 09:00 – 18:00
+                        <br />
+                        Saturday: 10:00 – 16:00
+                        <br />
+                        Sunday: Closed
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -108,9 +232,12 @@ export const ContactPage: React.FC = () => {
                     <span>Public Transport Connections:</span>
                   </div>
                   <p className="text-slate-500 dark:text-slate-400">
-                    • <strong>Aldgate East Station:</strong> 2 minutes walk (District & Hammersmith Lines)<br />
-                    • <strong>Whitechapel Station:</strong> 6 minutes walk (Elizabeth Line & Overground)<br />
-                    • <strong>Liverpool Street Station:</strong> 10 minutes walk
+                    • <strong>Aldgate East Station:</strong> 2 minutes walk
+                    (District & Hammersmith Lines)
+                    <br />• <strong>Whitechapel Station:</strong> 6 minutes walk
+                    (Elizabeth Line & Overground)
+                    <br />• <strong>Liverpool Street Station:</strong> 10
+                    minutes walk
                   </p>
                 </div>
               </div>
@@ -133,10 +260,11 @@ export const ContactPage: React.FC = () => {
                       Message Dispatched Successfully!
                     </h4>
                     <p className="text-xs text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
-                      Thank you for contacting Apex Academy. An advisor has been assigned to your query and will reach out shortly.
+                      Thank you for contacting Apex Academy. An advisor has been
+                      assigned to your query and will reach out shortly.
                     </p>
                     <button
-                      onClick={() => setSubmitted(false)}
+                      onClick={resetForm}
                       className="mt-4 px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl"
                     >
                       Send Another Message
@@ -144,6 +272,12 @@ export const ContactPage: React.FC = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    {error && (
+                      <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 text-xs text-red-600 dark:text-red-400">
+                        {error}
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -153,7 +287,12 @@ export const ContactPage: React.FC = () => {
                           type="text"
                           required
                           value={formData.fullName}
-                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              fullName: e.target.value,
+                            })
+                          }
                           className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                           placeholder="e.g. Tariq Ahmed"
                         />
@@ -167,7 +306,9 @@ export const ContactPage: React.FC = () => {
                           type="email"
                           required
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
                           className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                           placeholder="tariq@example.com"
                         />
@@ -183,7 +324,9 @@ export const ContactPage: React.FC = () => {
                           type="tel"
                           required
                           value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phone: e.target.value })
+                          }
                           className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                           placeholder="+44 7123 456789"
                         />
@@ -195,15 +338,32 @@ export const ContactPage: React.FC = () => {
                         </label>
                         <select
                           value={formData.subject}
-                          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              subject: e.target.value,
+                            })
+                          }
                           className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                         >
-                          <option value="Course Enrolment Query">Course Enrolment Query</option>
-                          <option value="SIA Security Licence Training">SIA Security Licence Training</option>
-                          <option value="CSCS Construction Card">CSCS Construction Card</option>
-                          <option value="UK Degree Top-Up Pathway">UK Degree Top-Up Pathway</option>
-                          <option value="International Student Visa & CAS">International Student Visa & CAS</option>
-                          <option value="Corporate / Group Bookings">Corporate / Group Bookings</option>
+                          <option value="Course Enrolment Query">
+                            Course Enrolment Query
+                          </option>
+                          <option value="SIA Security Licence Training">
+                            SIA Security Licence Training
+                          </option>
+                          <option value="CSCS Construction Card">
+                            CSCS Construction Card
+                          </option>
+                          <option value="UK Degree Top-Up Pathway">
+                            UK Degree Top-Up Pathway
+                          </option>
+                          <option value="International Student Visa & CAS">
+                            International Student Visa & CAS
+                          </option>
+                          <option value="Corporate / Group Bookings">
+                            Corporate / Group Bookings
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -216,7 +376,9 @@ export const ContactPage: React.FC = () => {
                         rows={4}
                         required
                         value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, message: e.target.value })
+                        }
                         className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
                         placeholder="Tell us what you would like to know..."
                       />
@@ -224,10 +386,20 @@ export const ContactPage: React.FC = () => {
 
                     <button
                       type="submit"
-                      className="w-full py-3.5 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-600/25 transition-all flex items-center justify-center gap-2"
+                      disabled={submitting}
+                      className="w-full py-3.5 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-600/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Submit Inquiry</span>
+                      {submitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Sending</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Submit Inquiry</span>
+                        </>
+                      )}
                     </button>
                   </form>
                 )}

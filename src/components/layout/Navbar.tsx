@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
 import {
   GraduationCap,
   ChevronDown,
@@ -15,16 +15,13 @@ import {
   HeartHandshake,
   Languages,
   Award,
-  Globe2,
-  BookOpen,
   ArrowRight,
   Sparkles,
   PhoneCall,
-  UserCheck
-} from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { useModal } from '../../context/ModalContext';
-import { categoriesData } from '../../data/categoriesData';
+} from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
+import { useModal } from "../../context/ModalContext";
+import { categoriesData } from "../../data/categoriesData";
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -34,7 +31,9 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null);
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<
+    string | null
+  >(null);
 
   // Detect scroll to toggle glassmorphism
   useEffect(() => {
@@ -45,8 +44,8 @@ export const Navbar: React.FC = () => {
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close menus on route navigation
@@ -57,41 +56,63 @@ export const Navbar: React.FC = () => {
 
   const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
-      case 'ShieldCheck': return <ShieldCheck className="w-5 h-5 text-indigo-500" />;
-      case 'HardHat': return <HardHat className="w-5 h-5 text-amber-500" />;
-      case 'Briefcase': return <Briefcase className="w-5 h-5 text-blue-500" />;
-      case 'HeartHandshake': return <HeartHandshake className="w-5 h-5 text-teal-500" />;
-      case 'Languages': return <Languages className="w-5 h-5 text-cyan-500" />;
-      case 'Award': return <Award className="w-5 h-5 text-purple-500" />;
-      default: return <GraduationCap className="w-5 h-5 text-indigo-500" />;
+      case "ShieldCheck":
+        return <ShieldCheck className="w-5 h-5 text-indigo-500" />;
+      case "HardHat":
+        return <HardHat className="w-5 h-5 text-amber-500" />;
+      case "Briefcase":
+        return <Briefcase className="w-5 h-5 text-blue-500" />;
+      case "HeartHandshake":
+        return <HeartHandshake className="w-5 h-5 text-teal-500" />;
+      case "Languages":
+        return <Languages className="w-5 h-5 text-cyan-500" />;
+      case "Award":
+        return <Award className="w-5 h-5 text-purple-500" />;
+      default:
+        return <GraduationCap className="w-5 h-5 text-indigo-500" />;
     }
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Courses', path: '/courses', hasMegaMenu: true },
-    { name: 'Study in UK', path: '/study-in-uk' },
-    { name: 'International', path: '/international-students' },
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Courses", path: "/courses", hasMegaMenu: true },
+    { name: "Study in UK", path: "/study-in-uk" },
     {
-      name: 'Resources',
+      name: "Resources",
       hasDropdown: true,
       children: [
-        { name: 'Admissions & Intakes', path: '/admissions', desc: 'Entry requirements & payment plans' },
-        { name: 'Student Support', path: '/student-support', desc: 'Career clinic, CV & pastoral support' },
-        { name: 'Blog & UK Guides', path: '/blog', desc: 'Industry insights & visa news' },
-        { name: 'Frequently Asked Questions', path: '/faq', desc: 'Quick answers for applicants' }
-      ]
+        {
+          name: "Admissions & Intakes",
+          path: "/admissions",
+          desc: "Entry requirements & payment plans",
+        },
+        {
+          name: "Student Support",
+          path: "/student-support",
+          desc: "Career clinic, CV & pastoral support",
+        },
+        {
+          name: "Blog & UK Guides",
+          path: "/blog",
+          desc: "Industry insights & visa news",
+        },
+        {
+          name: "Frequently Asked Questions",
+          path: "/faq",
+          desc: "Quick answers for applicants",
+        },
+      ],
     },
-    { name: 'Contact', path: '/contact' }
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
         isScrolled
-          ? 'glass-nav shadow-lg shadow-indigo-950/5 py-3'
-          : 'backdrop-blur-xl bg-white/70 dark:bg-[#0B0F19]/75 border-b border-slate-200/50 dark:border-white/10 py-4 shadow-sm'
+          ? "glass-nav shadow-lg shadow-indigo-950/5 py-3"
+          : "backdrop-blur-xl bg-white/70 dark:bg-[#0B0F19]/75 border-b border-slate-200/50 dark:border-white/10 py-4 shadow-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,7 +129,10 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight text-indigo-950 dark:text-white uppercase block leading-tight font-display">
-                APEX <span className="text-indigo-600 dark:text-indigo-400">ACADEMY</span>
+                APEX{" "}
+                <span className="text-indigo-600 dark:text-indigo-400">
+                  ACADEMY
+                </span>
               </span>
               <span className="text-[10px] tracking-widest uppercase font-semibold text-slate-500 dark:text-slate-400 block -mt-0.5">
                 UK Professional Education
@@ -117,35 +141,40 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1" aria-label="Main Navigation">
+          <nav
+            className="hidden lg:flex items-center space-x-1"
+            aria-label="Main Navigation"
+          >
             {navLinks.map((link) => {
               if (link.hasMegaMenu) {
                 return (
                   <div
                     key={link.name}
                     className="relative"
-                    onMouseEnter={() => setActiveDropdown('courses')}
+                    onMouseEnter={() => setActiveDropdown("courses")}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <Link
                       to={link.path}
                       className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                        location.pathname.startsWith('/courses')
-                          ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs'
-                          : 'text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50'
+                        location.pathname.startsWith("/courses")
+                          ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs"
+                          : "text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50"
                       }`}
                     >
                       <span>{link.name}</span>
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
-                          activeDropdown === 'courses' ? 'rotate-180 text-indigo-600' : 'text-slate-400'
+                          activeDropdown === "courses"
+                            ? "rotate-180 text-indigo-600"
+                            : "text-slate-400"
                         }`}
                       />
                     </Link>
 
                     {/* Mega Menu Dropdown */}
                     <AnimatePresence>
-                      {activeDropdown === 'courses' && (
+                      {activeDropdown === "courses" && (
                         <motion.div
                           initial={{ opacity: 0, y: 12, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -159,7 +188,8 @@ export const Navbar: React.FC = () => {
                                 Accredited Qualifications Directory
                               </p>
                               <p className="text-sm text-slate-500 dark:text-slate-400">
-                                Regulated qualifications designed for fast employment & degree progression
+                                Regulated qualifications designed for fast
+                                employment & degree progression
                               </p>
                             </div>
                             <Link
@@ -205,7 +235,9 @@ export const Navbar: React.FC = () => {
                               Need custom corporate or group training?
                             </span>
                             <button
-                              onClick={() => openAdvisorModal('Corporate / Group Training')}
+                              onClick={() =>
+                                openAdvisorModal("Corporate / Group Training")
+                              }
                               className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
                             >
                               Contact Enterprise Desk →
@@ -223,29 +255,31 @@ export const Navbar: React.FC = () => {
                   <div
                     key={link.name}
                     className="relative"
-                    onMouseEnter={() => setActiveDropdown('resources')}
+                    onMouseEnter={() => setActiveDropdown("resources")}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <button
                       className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                        location.pathname.startsWith('/blog') ||
-                        location.pathname.startsWith('/faq') ||
-                        location.pathname.startsWith('/admissions') ||
-                        location.pathname.startsWith('/student-support')
-                          ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs'
-                          : 'text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50'
+                        location.pathname.startsWith("/blog") ||
+                        location.pathname.startsWith("/faq") ||
+                        location.pathname.startsWith("/admissions") ||
+                        location.pathname.startsWith("/student-support")
+                          ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs"
+                          : "text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50"
                       }`}
                     >
                       <span>{link.name}</span>
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
-                          activeDropdown === 'resources' ? 'rotate-180 text-indigo-600' : 'text-slate-400'
+                          activeDropdown === "resources"
+                            ? "rotate-180 text-indigo-600"
+                            : "text-slate-400"
                         }`}
                       />
                     </button>
 
                     <AnimatePresence>
-                      {activeDropdown === 'resources' && (
+                      {activeDropdown === "resources" && (
                         <motion.div
                           initial={{ opacity: 0, y: 12, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -281,8 +315,8 @@ export const Navbar: React.FC = () => {
                   to={link.path}
                   className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs'
-                      : 'text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50'
+                      ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-slate-800/80 shadow-xs"
+                      : "text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/60 dark:hover:bg-slate-800/50"
                   }`}
                 >
                   {link.name}
@@ -308,11 +342,11 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-800 backdrop-blur-sm transition-colors border border-transparent hover:border-slate-200/60"
-              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
               aria-label="Toggle Theme"
               id="theme-toggle-btn"
             >
-              {theme === 'dark' ? (
+              {theme === "dark" ? (
                 <Sun className="w-5 h-5 text-amber-400 transition-transform rotate-0 hover:rotate-45" />
               ) : (
                 <Moon className="w-5 h-5 text-indigo-600 transition-transform rotate-0 hover:-rotate-12" />
@@ -336,7 +370,11 @@ export const Navbar: React.FC = () => {
               aria-label="Toggle Mobile Menu"
               id="mobile-menu-btn"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -347,7 +385,7 @@ export const Navbar: React.FC = () => {
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
             className="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 shadow-xl max-h-[85vh] overflow-y-auto"
@@ -371,7 +409,7 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={() =>
                     setMobileExpandedSection(
-                      mobileExpandedSection === 'courses' ? null : 'courses'
+                      mobileExpandedSection === "courses" ? null : "courses",
                     )
                   }
                   className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-left"
@@ -379,11 +417,13 @@ export const Navbar: React.FC = () => {
                   <span>Courses Directory</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
-                      mobileExpandedSection === 'courses' ? 'rotate-180 text-indigo-600' : ''
+                      mobileExpandedSection === "courses"
+                        ? "rotate-180 text-indigo-600"
+                        : ""
                     }`}
                   />
                 </button>
-                {mobileExpandedSection === 'courses' && (
+                {mobileExpandedSection === "courses" && (
                   <div className="pl-4 pr-2 py-2 space-y-1 bg-slate-50 dark:bg-slate-800/40 rounded-xl my-1">
                     <Link
                       to="/courses"
@@ -423,7 +463,9 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={() =>
                     setMobileExpandedSection(
-                      mobileExpandedSection === 'resources' ? null : 'resources'
+                      mobileExpandedSection === "resources"
+                        ? null
+                        : "resources",
                     )
                   }
                   className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-left"
@@ -431,11 +473,13 @@ export const Navbar: React.FC = () => {
                   <span>Student Resources</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
-                      mobileExpandedSection === 'resources' ? 'rotate-180 text-indigo-600' : ''
+                      mobileExpandedSection === "resources"
+                        ? "rotate-180 text-indigo-600"
+                        : ""
                     }`}
                   />
                 </button>
-                {mobileExpandedSection === 'resources' && (
+                {mobileExpandedSection === "resources" && (
                   <div className="pl-4 pr-2 py-2 space-y-1 bg-slate-50 dark:bg-slate-800/40 rounded-xl my-1">
                     <Link
                       to="/admissions"

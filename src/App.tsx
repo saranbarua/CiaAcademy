@@ -16,7 +16,6 @@ import { CoursesPage } from "./pages/CoursesPage";
 import { CategoryPage } from "./pages/CategoryPage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
 import { StudyInUkPage } from "./pages/StudyInUkPage";
-import { InternationalStudentsPage } from "./pages/InternationalStudentsPage";
 import { AdmissionsPage } from "./pages/AdmissionsPage";
 import { StudentSupportPage } from "./pages/StudentSupportPage";
 import { BlogPage } from "./pages/BlogPage";
@@ -51,10 +50,7 @@ export default function App() {
                 element={<CourseDetailPage />}
               />
               <Route path="/study-in-uk" element={<StudyInUkPage />} />
-              <Route
-                path="/international-students"
-                element={<InternationalStudentsPage />}
-              />
+
               <Route path="/admissions" element={<AdmissionsPage />} />
               <Route path="/student-support" element={<StudentSupportPage />} />
               <Route path="/blog" element={<BlogPage />} />
