@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useModal } from "../../context/ModalContext";
-import { categoriesData } from "../../data/categoriesData";
+import { fetchPublicCategories, ApiCategory } from "../../data/api/couAPi";
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -34,6 +34,9 @@ export const Navbar: React.FC = () => {
   const [mobileExpandedSection, setMobileExpandedSection] = useState<
     string | null
   >(null);
+
+  const [categories, setCategories] = useState<ApiCategory[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   // Detect scroll to toggle glassmorphism
   useEffect(() => {
@@ -48,30 +51,58 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Load real categories from GET /categories/public
+  useEffect(() => {
+    let cancelled = false;
+    fetchPublicCategories()
+      .then((data) => {
+        if (cancelled) return;
+        const safe = Array.isArray(data)
+          ? data.filter((c) => c?.isActive !== false && !!c?.slug)
+          : [];
+        safe.sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
+        setCategories(safe);
+      })
+      .catch(() => {
+        // silently ignore — nav still works without the mega menu list
+      })
+      .finally(() => {
+        if (!cancelled) setCategoriesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   // Close menus on route navigation
   useEffect(() => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
   }, [location.pathname]);
 
-  const getCategoryIcon = (iconName: string) => {
-    switch (iconName) {
-      case "ShieldCheck":
-        return <ShieldCheck className="w-5 h-5 text-indigo-500" />;
-      case "HardHat":
-        return <HardHat className="w-5 h-5 text-amber-500" />;
-      case "Briefcase":
-        return <Briefcase className="w-5 h-5 text-blue-500" />;
-      case "HeartHandshake":
-        return <HeartHandshake className="w-5 h-5 text-teal-500" />;
-      case "Languages":
-        return <Languages className="w-5 h-5 text-cyan-500" />;
-      case "Award":
-        return <Award className="w-5 h-5 text-purple-500" />;
-      default:
-        return <GraduationCap className="w-5 h-5 text-indigo-500" />;
-    }
+  // No iconName field comes from the API, so pick a sensible icon
+  // by matching keywords in the category name/slug.
+  const getCategoryIcon = (category: ApiCategory) => {
+    const key = `${category.name} ${category.slug}`.toLowerCase();
+    if (/(security|guard|door|supervis|sia)/.test(key))
+      return <ShieldCheck className="w-5 h-5 text-indigo-500" />;
+    if (/(construction|cscs|hardhat|site)/.test(key))
+      return <HardHat className="w-5 h-5 text-amber-500" />;
+    if (/(business|management|admin|finance)/.test(key))
+      return <Briefcase className="w-5 h-5 text-blue-500" />;
+    if (/(care|health|social|nursing)/.test(key))
+      return <HeartHandshake className="w-5 h-5 text-teal-500" />;
+    if (/(language|english|esol)/.test(key))
+      return <Languages className="w-5 h-5 text-cyan-500" />;
+    if (/(diploma|nvq|qualification|award|degree)/.test(key))
+      return <Award className="w-5 h-5 text-purple-500" />;
+    return <GraduationCap className="w-5 h-5 text-indigo-500" />;
   };
+
+  const totalCourseCount = categories.reduce(
+    (acc, c) => acc + (c._count?.courses ?? 0),
+    0,
+  );
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -201,48 +232,53 @@ export const Navbar: React.FC = () => {
                             </Link>
                           </div>
 
-                          <div className="grid grid-cols-3 gap-3">
-                            {categoriesData.map((cat) => (
-                              <Link
-                                key={cat.id}
-                                to={`/courses/${cat.slug}`}
-                                className="p-3 rounded-2xl hover:bg-white/80 dark:hover:bg-slate-800/80 border border-transparent hover:border-white/80 dark:hover:border-slate-700 transition-all group/cat text-left block"
-                              >
-                                <div className="flex items-center space-x-2.5 mb-1.5">
-                                  <div className="p-2 rounded-xl bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 group-hover/cat:scale-110 transition-transform">
-                                    {getCategoryIcon(cat.iconName)}
-                                  </div>
-                                  <div>
-                                    <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover/cat:text-indigo-600 dark:group-hover/cat:text-indigo-400">
-                                      {cat.name}
-                                    </h4>
-                                    <span className="text-[11px] text-slate-400">
-                                      {cat.courseCount} Qualifications
-                                    </span>
-                                  </div>
+                          {categoriesLoading ? (
+                            <div className="grid grid-cols-3 gap-3">
+                              {[0, 1, 2, 3, 4, 5].map((i) => (
+                                <div
+                                  key={i}
+                                  className="p-3 rounded-2xl animate-pulse space-y-2"
+                                >
+                                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800" />
+                                  <div className="h-3 w-3/4 bg-slate-100 dark:bg-slate-800 rounded" />
+                                  <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded" />
                                 </div>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
-                                  {cat.popularCert}
-                                </p>
-                              </Link>
-                            ))}
-                          </div>
-
-                          {/* Quick Banner footer */}
-                          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-indigo-50/70 to-violet-50/70 dark:from-indigo-950/40 dark:to-violet-950/40 -mx-6 -mb-6 p-4 px-6 text-xs text-slate-600 dark:text-slate-300">
-                            <span className="flex items-center gap-1.5 font-medium text-slate-900 dark:text-white">
-                              <Sparkles className="w-4 h-4 text-amber-500" />
-                              Need custom corporate or group training?
-                            </span>
-                            <button
-                              onClick={() =>
-                                openAdvisorModal("Corporate / Group Training")
-                              }
-                              className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
-                            >
-                              Contact Enterprise Desk →
-                            </button>
-                          </div>
+                              ))}
+                            </div>
+                          ) : categories.length === 0 ? (
+                            <p className="text-xs text-slate-400 text-center py-6">
+                              Categories are being updated \u2014 check back
+                              soon.
+                            </p>
+                          ) : (
+                            <div className="grid grid-cols-3 gap-3">
+                              {categories.map((cat) => (
+                                <Link
+                                  key={cat.id}
+                                  to={`/courses?category=${cat.slug}`}
+                                  className="p-3 rounded-2xl hover:bg-white/80 dark:hover:bg-slate-800/80 border border-transparent hover:border-white/80 dark:hover:border-slate-700 transition-all group/cat text-left block"
+                                >
+                                  <div className="flex items-center space-x-2.5 mb-1.5">
+                                    <div className="p-2 rounded-xl bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 group-hover/cat:scale-110 transition-transform">
+                                      {getCategoryIcon(cat)}
+                                    </div>
+                                    <div>
+                                      <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover/cat:text-indigo-600 dark:group-hover/cat:text-indigo-400">
+                                        {cat.name}
+                                      </h4>
+                                      <span className="text-[11px] text-slate-400">
+                                        {cat._count?.courses ?? 0}{" "}
+                                        Qualifications
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                                    {cat.description}
+                                  </p>
+                                </Link>
+                              ))}
+                            </div>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -414,7 +450,7 @@ export const Navbar: React.FC = () => {
                   }
                   className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-left"
                 >
-                  <span>Courses Directory</span>
+                  <span>Courses Directory ({totalCourseCount})</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
                       mobileExpandedSection === "courses"
@@ -431,15 +467,25 @@ export const Navbar: React.FC = () => {
                     >
                       All Courses Overview →
                     </Link>
-                    {categoriesData.map((cat) => (
-                      <Link
-                        key={cat.id}
-                        to={`/courses/${cat.slug}`}
-                        className="block px-3 py-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-600"
-                      >
-                        {cat.name}
-                      </Link>
-                    ))}
+                    {categoriesLoading ? (
+                      <p className="px-3 py-1.5 text-xs text-slate-400">
+                        Loading categories\u2026
+                      </p>
+                    ) : categories.length === 0 ? (
+                      <p className="px-3 py-1.5 text-xs text-slate-400">
+                        No categories available yet.
+                      </p>
+                    ) : (
+                      categories.map((cat) => (
+                        <Link
+                          key={cat.id}
+                          to={`/courses?category=${cat.slug}`}
+                          className="block px-3 py-1.5 text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-600"
+                        >
+                          {cat.name}
+                        </Link>
+                      ))
+                    )}
                   </div>
                 )}
               </div>
