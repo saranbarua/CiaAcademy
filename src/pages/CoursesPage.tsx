@@ -455,11 +455,11 @@ export const CoursesPage: React.FC = () => {
                           </span>
                           <div className="flex items-baseline space-x-1.5">
                             <span className="text-lg font-extrabold text-slate-900 dark:text-white">
-                              {course.discountedPrice ?? course.price ?? 0}
+                              £{course.discountedPrice ?? course.price ?? 0}
                             </span>
                             {course.discountedPrice != null && (
                               <span className="text-xs text-slate-400 line-through">
-                                {course.price}
+                                £{course.price}
                               </span>
                             )}
                           </div>
@@ -514,7 +514,7 @@ export const CoursesPage: React.FC = () => {
                           <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold">
                             {levelLabel(course.level)}
                           </span>
-                          <span className="text-slate-400">\u2022</span>
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
                           <span className="text-slate-500 dark:text-slate-400">
                             {durationLabel(course)}
                           </span>

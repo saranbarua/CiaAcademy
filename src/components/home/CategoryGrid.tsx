@@ -211,7 +211,7 @@ export const CategoryGrid: React.FC = () => {
               to={`/courses/${selectedCategoryInfo.slug}`}
               className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 to-cyan-300 hover:from-cyan-300 hover:to-cyan-200 text-slate-950 font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-cyan-500/25 hover:scale-105 active:scale-95 transition-all flex-shrink-0"
             >
-              Browse All {selectedCategoryInfo.name} \u2192
+              Browse All {selectedCategoryInfo.name}
             </Link>
           </motion.div>
         )}
@@ -257,7 +257,7 @@ export const CategoryGrid: React.FC = () => {
                       />
                       {course.discountedPrice != null && (
                         <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-indigo-600/90 backdrop-blur-md text-white shadow-md border border-white/20">
-                          Discount
+                          Popular Offer
                         </span>
                       )}
                       <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/80 backdrop-blur-md text-white border border-white/20">
@@ -272,7 +272,7 @@ export const CategoryGrid: React.FC = () => {
                         <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
                           <div className="flex items-center text-amber-500 font-semibold">
                             <Star className="w-3.5 h-3.5 fill-current mr-1" />
-                            <span>{rating || "\u2014"}</span>
+                            <span>{rating || ""}</span>
                             <span className="text-slate-400 font-normal ml-1">
                               ({reviewCount})
                             </span>
@@ -319,11 +319,11 @@ export const CategoryGrid: React.FC = () => {
                           </span>
                           <div className="flex items-baseline space-x-1.5">
                             <span className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
-                              {course.discountedPrice ?? course.price ?? 0}
+                              £{course.discountedPrice ?? course.price ?? 0}
                             </span>
                             {course.discountedPrice != null && (
                               <span className="text-xs text-slate-400 line-through">
-                                {course.price}
+                                £{course.price}
                               </span>
                             )}
                           </div>

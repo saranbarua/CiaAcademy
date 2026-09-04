@@ -163,8 +163,8 @@ export const CourseDetailPage: React.FC = () => {
         <Breadcrumbs
           items={[
             { label: "Courses", path: "/courses" },
-            { label: categoryName, path: `/courses/${categorySlug}` },
-            { label: course.title },
+            // { label: categoryName, path: `/courses/${categorySlug}` },
+            // { label: course.title },
           ]}
         />
 
@@ -444,11 +444,11 @@ export const CourseDetailPage: React.FC = () => {
                   </span>
                   <div className="flex items-baseline space-x-2">
                     <span className="text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-                      {course.discountedPrice ?? course.price ?? 0}
+                      £{course.discountedPrice ?? course.price ?? 0}
                     </span>
                     {course.discountedPrice != null && (
                       <span className="text-sm text-slate-400 line-through font-medium">
-                        {course.price}
+                        £{course.price}
                       </span>
                     )}
                   </div>
