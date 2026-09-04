@@ -22,7 +22,7 @@ import {
   durationLabel,
   ApiCategory,
   ApiCourse,
-} from "../data/api/coursesApi";
+} from "../data/api/couAPi";
 
 type SortOption = "featured" | "price-asc" | "price-desc" | "rating";
 
