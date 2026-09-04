@@ -24,7 +24,7 @@ import {
   durationLabel,
   ApiCategory,
   ApiCourse,
-} from "../../data/api/coursesApi";
+} from "../../data/api/couAPi";
 
 function getCategoryIcon(name?: string) {
   const n = (name || "").toLowerCase();
