@@ -21,7 +21,7 @@ import {
   levelLabel,
   durationLabel,
   ApiCourse,
-} from "../data/api/coursesApi";
+} from "../data/api/couAPi";
 import apiurl from "../apiUrl/apiUrl";
 import { CourseReviews } from "../components/course/CourseReviews";
 
