@@ -1,123 +1,107 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Search, ChevronDown, HelpCircle, PhoneCall, Mail } from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { faqsData } from '../data/faqsData';
-import { useModal } from '../context/ModalContext';
+// src/components/home/FAQSection.tsx
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronDown, HelpCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { fetchActiveFaqs, sortedFaqs, ApiFaq } from "../data/api/faqApi";
+import { useModal } from "../context/ModalContext";
+const HOME_FAQ_COUNT = 6;
 
-export const FAQPage: React.FC = () => {
+function FaqSkeleton() {
+  return (
+    <div className="space-y-3.5 animate-pulse">
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="h-16 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80"
+        />
+      ))}
+    </div>
+  );
+}
+
+export const FAQSection: React.FC = () => {
+  const [faqs, setFaqs] = useState<ApiFaq[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<number | null>(null);
   const { openAdvisorModal } = useModal();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [openId, setOpenId] = useState<string | null>(faqsData[0]?.id || null);
 
-  const categories = ['All', 'Admissions', 'Courses & Certifications', 'International & Visa', 'Fees & Funding', 'Career & Exams'];
+  useEffect(() => {
+    let cancelled = false;
+    fetchActiveFaqs()
+      .then((data) => {
+        if (cancelled) return;
+        const sorted = sortedFaqs(Array.isArray(data) ? data : []);
+        setFaqs(sorted);
+        if (sorted.length > 0) setOpenId(sorted[0].id);
+      })
+      .catch(
+        (err) => !cancelled && setError(err.message || "Could not load FAQs."),
+      )
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const filteredFaqs = useMemo(() => {
-    return faqsData.filter((faq) => {
-      if (selectedCategory !== 'All' && faq.category !== selectedCategory) return false;
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        return faq.question.toLowerCase().includes(q) || faq.answer.toLowerCase().includes(q);
-      }
-      return true;
-    });
-  }, [searchQuery, selectedCategory]);
-
-  const toggleFAQ = (id: string) => {
+  const toggleFAQ = (id: number) => {
     setOpenId((prev) => (prev === id ? null : id));
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqsData.slice(0, 10).map((f) => ({
-      '@type': 'Question',
-      name: f.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: f.answer
-      }
-    }))
-  };
+  const homeFaqs = faqs.slice(0, HOME_FAQ_COUNT);
+
+  // Nothing to show and nothing went wrong \u2014 quietly skip the whole section
+  if (!loading && !error && homeFaqs.length === 0) return null;
 
   return (
-    <>
-      <SEOHead
-        title="Frequently Asked Questions (FAQ) | Apex Academy London"
-        description="Find answers to all questions regarding SIA licence training, CSCS green card tests, UK university top-up diplomas, student visa requirements, and tuition fees."
-        keywords="Apex Academy FAQ, SIA course questions, CSCS test help London, UK student visa FAQ, degree top up questions"
-        canonicalUrl="https://apexacademy.ac.uk/faq"
-        schemaJson={faqSchema}
-      />
+    <section
+      className="py-20 bg-slate-50 dark:bg-[#0E1322] relative overflow-hidden"
+      id="faq-section"
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-3.5 py-1.5 rounded-full border border-indigo-200 dark:border-indigo-800 inline-flex items-center gap-1.5 mb-3">
+            <HelpCircle className="w-3.5 h-3.5 text-cyan-500" />
+            Frequently Asked Questions
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white">
+            Have Questions? We Have Answers.
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2">
+            Everything you need to know about our certifications, timetables,
+            and UK admission pathways.
+          </p>
+        </div>
 
-      <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Frequently Asked Questions' }]} />
-
-        {/* Hero */}
-        <section className="py-12 bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-3xl">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-3.5 py-1.5 rounded-full border border-cyan-800/60 inline-block mb-3">
-                Help & Knowledge Base
-              </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-white">
-                Frequently Asked Questions
-              </h1>
-              <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Quick, authoritative answers about our courses, accreditation, timetables, and admissions.
-              </p>
-            </div>
+        {error && (
+          <div className="mb-6 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-600 dark:text-red-300">
+            {error}
           </div>
-        </section>
+        )}
 
-        {/* Filters */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-white dark:bg-slate-800/90 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4 mb-8">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search questions (e.g. SIA licence, deposit, re-sit, CAS)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-
-            <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-                    selectedCategory === cat
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Accordion List */}
+        {/* Accordion List */}
+        {loading ? (
+          <FaqSkeleton />
+        ) : (
           <div className="space-y-3.5">
-            {filteredFaqs.map((faq) => {
+            {homeFaqs.map((faq) => {
               const isOpen = openId === faq.id;
               return (
                 <div
                   key={faq.id}
-                  className="rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden"
+                  className="rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden transition-colors"
                 >
                   <button
                     onClick={() => toggleFAQ(faq.id)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400"
+                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                    aria-expanded={isOpen}
                   >
                     <span>{faq.question}</span>
-                    <div className={`p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 transition-transform ${isOpen ? 'rotate-180 bg-indigo-50 text-indigo-600' : ''}`}>
+                    <div
+                      className={`p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 transition-transform duration-200 flex-shrink-0 ${isOpen ? "rotate-180 bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400" : ""}`}
+                    >
                       <ChevronDown className="w-4 h-4" />
                     </div>
                   </button>
@@ -126,11 +110,11 @@ export const FAQPage: React.FC = () => {
                     {isOpen && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
+                        animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.25 }}
                       >
-                        <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/50 pt-4">
+                        <div className="px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/50 pt-4 whitespace-pre-line">
                           {faq.answer}
                         </div>
                       </motion.div>
@@ -140,26 +124,34 @@ export const FAQPage: React.FC = () => {
               );
             })}
           </div>
+        )}
 
-          {/* Still Need Help Box */}
-          <div className="mt-12 p-6 rounded-3xl bg-indigo-50/80 dark:bg-slate-850 border border-indigo-100 dark:border-slate-700 text-center space-y-3">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
-              Can't find the answer you're looking for?
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-              Our course admissions advisors are available on live phone and email support Monday to Saturday.
+        {/* Bottom Help Note */}
+        <div className="mt-10 p-6 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-800/60 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-center sm:text-left">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+              Still have questions?
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+              Our academic advisors are available Mon-Sat to guide you.
             </p>
-            <div className="pt-2 flex justify-center gap-3">
-              <button
-                onClick={() => openAdvisorModal('FAQ Unresolved Question')}
-                className="px-5 py-2.5 bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-indigo-700 shadow-md"
-              >
-                Speak with an Advisor
-              </button>
-            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => openAdvisorModal("General Questions")}
+              className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+            >
+              Ask an Advisor
+            </button>
+            <Link
+              to="/faq"
+              className="px-4 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors"
+            >
+              View Full FAQ{faqs.length > 0 ? ` (${faqs.length}+)` : ""}
+            </Link>
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 };

@@ -21,10 +21,10 @@ import { AdmissionsPage } from "./pages/AdmissionsPage";
 import { StudentSupportPage } from "./pages/StudentSupportPage";
 import { BlogPage } from "./pages/BlogPage";
 import { BlogDetailPage } from "./pages/BlogDetailPage";
-import { FAQPage } from "./pages/FAQPage";
 import { ContactPage } from "./pages/ContactPage";
 import { ApplyPage } from "./pages/ApplyPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { FAQSection } from "./pages/FAQPage";
 
 export default function App() {
   return (
@@ -59,7 +59,7 @@ export default function App() {
               <Route path="/student-support" element={<StudentSupportPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogDetailPage />} />
-              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/faq" element={<FAQSection />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/apply" element={<ApplyPage />} />
               <Route path="*" element={<NotFoundPage />} />
