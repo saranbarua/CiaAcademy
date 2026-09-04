@@ -1,42 +1,43 @@
-import React from 'react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Hero } from '../components/home/Hero';
-import { TrustPartners } from '../components/home/TrustPartners';
-import { AnimatedStats } from '../components/home/AnimatedStats';
-import { CategoryGrid } from '../components/home/CategoryGrid';
-import { FeaturedCoursesSlider } from '../components/home/FeaturedCoursesSlider';
-import { WhyChooseUs } from '../components/home/WhyChooseUs';
-import { StudyUKSection } from '../components/home/StudyUKSection';
-import { InternationalStudentsSection } from '../components/home/InternationalStudentsSection';
-import { CareerPathways } from '../components/home/CareerPathways';
-import { StudentSuccess } from '../components/home/StudentSuccess';
-import { GoogleReviewProof } from '../components/home/GoogleReviewProof';
-import { HowItWorks } from '../components/home/HowItWorks';
-import { NewsBlogSection } from '../components/home/NewsBlogSection';
-import { FAQSection } from '../components/home/FAQSection';
-import { CTASection } from '../components/home/CTASection';
+import React from "react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Hero } from "../components/home/Hero";
+import { TrustPartners } from "../components/home/TrustPartners";
+import { AnimatedStats } from "../components/home/AnimatedStats";
+import { CategoryGrid } from "../components/home/CategoryGrid";
+import { FeaturedCoursesSlider } from "../components/home/FeaturedCoursesSlider";
+import { WhyChooseUs } from "../components/home/WhyChooseUs";
+import { StudyUKSection } from "../components/home/StudyUKSection";
+import { InternationalStudentsSection } from "../components/home/InternationalStudentsSection";
+import { CareerPathways } from "../components/home/CareerPathways";
+import { StudentSuccess } from "../components/home/StudentSuccess";
+import { GoogleReviewProof } from "../components/home/GoogleReviewProof";
+import { HowItWorks } from "../components/home/HowItWorks";
+import { NewsBlogSection } from "../components/home/NewsBlogSection";
+import { FAQSection } from "../components/home/FAQSection";
+import { CTASection } from "../components/home/CTASection";
 
 export const HomePage: React.FC = () => {
   const homeSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'EducationalOrganization',
-    name: 'Apex Academy of Professional Education',
-    url: 'https://apexacademy.ac.uk',
-    logo: 'https://apexacademy.ac.uk/logo.png',
-    description: 'Premier UK education and training academy providing accredited SIA, CSCS, Health & Social Care, Business, and University Pathway qualifications.',
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "Apex Academy of Professional Education",
+    url: "https://apexacademy.ac.uk",
+    logo: "https://apexacademy.ac.uk/logo.png",
+    description:
+      "Premier UK education and training academy providing accredited SIA, CSCS, Health & Social Care, Business, and University Pathway qualifications.",
     address: {
-      '@type': 'PostalAddress',
-      streetAddress: '45 Commercial Road',
-      addressLocality: 'London',
-      postalCode: 'E1 1LA',
-      addressCountry: 'GB'
+      "@type": "PostalAddress",
+      streetAddress: "45 Commercial Road",
+      addressLocality: "London",
+      postalCode: "E1 1LA",
+      addressCountry: "GB",
     },
-    telephone: '+44-20-8123-4567',
+    telephone: "+44-20-8123-4567",
     sameAs: [
-      'https://facebook.com/apexacademyuk',
-      'https://linkedin.com/school/apexacademyuk',
-      'https://instagram.com/apexacademyuk'
-    ]
+      "https://facebook.com/apexacademyuk",
+      "https://linkedin.com/school/apexacademyuk",
+      "https://instagram.com/apexacademyuk",
+    ],
   };
 
   return (
