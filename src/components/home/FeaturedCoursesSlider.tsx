@@ -204,7 +204,7 @@ export const FeaturedCoursesSlider: React.FC = () => {
                       <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                         <div className="flex items-center text-amber-500 font-semibold">
                           <Star className="w-4 h-4 fill-current mr-1" />
-                          <span>{rating || "\u2014"}</span>
+                          <span>{rating || ""}</span>
                           <span className="text-slate-400 font-normal ml-1">
                             ({reviewCount})
                           </span>
@@ -224,11 +224,11 @@ export const FeaturedCoursesSlider: React.FC = () => {
                         </span>
                         <div className="flex items-baseline space-x-1.5">
                           <span className="text-xl font-extrabold text-slate-900 dark:text-white font-display">
-                            \u00a3{course.discountedPrice ?? course.price ?? 0}
+                            £{course.discountedPrice ?? course.price ?? 0}
                           </span>
                           {course.discountedPrice != null && (
                             <span className="text-xs text-slate-400 line-through">
-                              \u00a3{course.price}
+                              £{course.price}
                             </span>
                           )}
                         </div>

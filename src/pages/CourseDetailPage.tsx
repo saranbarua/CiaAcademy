@@ -160,13 +160,7 @@ export const CourseDetailPage: React.FC = () => {
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-24">
-        <Breadcrumbs
-          items={[
-            { label: "Courses", path: "/courses" },
-            // { label: categoryName, path: `/courses/${categorySlug}` },
-            // { label: course.title },
-          ]}
-        />
+        <Breadcrumbs items={[{ label: "Courses", path: "/courses" }]} />
 
         {/* Course Header Banner */}
         <section className="py-12 bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -401,7 +395,8 @@ export const CourseDetailPage: React.FC = () => {
                               </div>
                               <div>
                                 <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                                  {formatDate(sched.startDate)} \u2013{" "}
+                                  {formatDate(sched.startDate)}
+                                  {"-"}
                                   {formatDate(sched.endDate)}
                                 </h4>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
