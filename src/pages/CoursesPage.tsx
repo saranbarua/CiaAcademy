@@ -455,12 +455,11 @@ export const CoursesPage: React.FC = () => {
                           </span>
                           <div className="flex items-baseline space-x-1.5">
                             <span className="text-lg font-extrabold text-slate-900 dark:text-white">
-                              \u00a3
                               {course.discountedPrice ?? course.price ?? 0}
                             </span>
                             {course.discountedPrice != null && (
                               <span className="text-xs text-slate-400 line-through">
-                                \u00a3{course.price}
+                                {course.price}
                               </span>
                             )}
                           </div>
@@ -537,7 +536,7 @@ export const CoursesPage: React.FC = () => {
                           Tuition Fee
                         </span>
                         <span className="text-xl font-extrabold text-slate-900 dark:text-white font-display">
-                          \u00a3{course.discountedPrice ?? course.price ?? 0}
+                          {course.discountedPrice ?? course.price ?? 0}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">

@@ -7,7 +7,6 @@ import { CategoryGrid } from "../components/home/CategoryGrid";
 import { FeaturedCoursesSlider } from "../components/home/FeaturedCoursesSlider";
 import { WhyChooseUs } from "../components/home/WhyChooseUs";
 import { StudyUKSection } from "../components/home/StudyUKSection";
-import { InternationalStudentsSection } from "../components/home/InternationalStudentsSection";
 import { CareerPathways } from "../components/home/CareerPathways";
 import { StudentSuccess } from "../components/home/StudentSuccess";
 import { GoogleReviewProof } from "../components/home/GoogleReviewProof";
@@ -58,7 +57,6 @@ export const HomePage: React.FC = () => {
         <FeaturedCoursesSlider />
         <WhyChooseUs />
         <StudyUKSection />
-        <InternationalStudentsSection />
         <CareerPathways />
         <StudentSuccess />
         <GoogleReviewProof />
