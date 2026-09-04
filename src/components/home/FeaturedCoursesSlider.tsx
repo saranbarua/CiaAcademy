@@ -17,7 +17,7 @@ import {
   durationLabel,
   nextScheduleVenue,
   ApiCourse,
-} from "../../data/api/coursesApi";
+} from "../../data/api/couAPi";
 
 const FEATURED_COUNT = 6;
 
