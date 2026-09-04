@@ -1,30 +1,30 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ModalProvider } from './context/ModalContext';
-import { TopBar } from './components/layout/TopBar';
-import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
-import { ScrollToTop } from './components/layout/ScrollToTop';
-import { AdvisorModal } from './components/common/AdvisorModal';
-import { BrochureModal } from './components/common/BrochureModal';
-import { LiveChatWidget } from './components/common/LiveChatWidget';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ModalProvider } from "./context/ModalContext";
+import { TopBar } from "./components/layout/TopBar";
+import { Navbar } from "./components/layout/Navbar";
+import { Footer } from "./components/layout/Footer";
+import { ScrollToTop } from "./components/layout/ScrollToTop";
+import { AdvisorModal } from "./components/common/AdvisorModal";
+import { BrochureModal } from "./components/common/BrochureModal";
+import { LiveChatWidget } from "./components/common/LiveChatWidget";
 
 // Pages
-import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { CoursesPage } from './pages/CoursesPage';
-import { CategoryPage } from './pages/CategoryPage';
-import { CourseDetailPage } from './pages/CourseDetailPage';
-import { StudyInUkPage } from './pages/StudyInUkPage';
-import { InternationalStudentsPage } from './pages/InternationalStudentsPage';
-import { AdmissionsPage } from './pages/AdmissionsPage';
-import { StudentSupportPage } from './pages/StudentSupportPage';
-import { BlogPage } from './pages/BlogPage';
-import { BlogDetailPage } from './pages/BlogDetailPage';
-import { FAQPage } from './pages/FAQPage';
-import { ContactPage } from './pages/ContactPage';
-import { ApplyPage } from './pages/ApplyPage';
-import { NotFoundPage } from './pages/NotFoundPage';
+import { HomePage } from "./pages/HomePage";
+import { AboutPage } from "./pages/AboutPage";
+import { CoursesPage } from "./pages/CoursesPage";
+import { CategoryPage } from "./pages/CategoryPage";
+import { CourseDetailPage } from "./pages/CourseDetailPage";
+import { StudyInUkPage } from "./pages/StudyInUkPage";
+import { InternationalStudentsPage } from "./pages/InternationalStudentsPage";
+import { AdmissionsPage } from "./pages/AdmissionsPage";
+import { StudentSupportPage } from "./pages/StudentSupportPage";
+import { BlogPage } from "./pages/BlogPage";
+import { BlogDetailPage } from "./pages/BlogDetailPage";
+import { FAQPage } from "./pages/FAQPage";
+import { ContactPage } from "./pages/ContactPage";
+import { ApplyPage } from "./pages/ApplyPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 export default function App() {
   return (
@@ -39,16 +39,22 @@ export default function App() {
           <ScrollToTop />
           <TopBar />
           <Navbar />
-          
+
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/courses/:category" element={<CategoryPage />} />
-              <Route path="/courses/:category/:slug" element={<CourseDetailPage />} />
+              <Route
+                path="/courses/:category/:slug"
+                element={<CourseDetailPage />}
+              />
               <Route path="/study-in-uk" element={<StudyInUkPage />} />
-              <Route path="/international-students" element={<InternationalStudentsPage />} />
+              <Route
+                path="/international-students"
+                element={<InternationalStudentsPage />}
+              />
               <Route path="/admissions" element={<AdmissionsPage />} />
               <Route path="/student-support" element={<StudentSupportPage />} />
               <Route path="/blog" element={<BlogPage />} />
@@ -65,7 +71,7 @@ export default function App() {
           {/* Interactive Global Elements */}
           <AdvisorModal />
           <BrochureModal />
-          <LiveChatWidget />
+          {/* <LiveChatWidget /> */}
         </div>
       </ModalProvider>
     </Router>
