@@ -17,23 +17,26 @@ import {
   Award,
   ArrowRight,
   PhoneCall,
+  User,
+  LogOut,
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useModal } from "../../context/ModalContext";
 import { fetchPublicCategories, ApiCategory } from "../../data/api/couAPi";
+import { useTraineeAuth } from "@/src/context/TraineeAuthContext";
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { openSearchModal, openAdvisorModal } = useModal();
   const location = useLocation();
-
+  const { trainee, isLoggedIn, logout } = useTraineeAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpandedSection, setMobileExpandedSection] = useState<
     string | null
   >(null);
-
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false); // <-- নতুন
   const [categories, setCategories] = useState<ApiCategory[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
@@ -104,7 +107,6 @@ export const Navbar: React.FC = () => {
   );
 
   const navLinks = [
-    { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Courses", path: "/courses" },
     { name: "Study in UK", path: "/study-in-uk" },
@@ -387,8 +389,67 @@ export const Navbar: React.FC = () => {
                 <Moon className="w-5 h-5 text-indigo-600 transition-transform rotate-0 hover:-rotate-12" />
               )}
             </button>
+            {/* Account / Login */}
+            {isLoggedIn ? (
+              <div
+                className="relative hidden sm:block"
+                onMouseEnter={() => setAccountDropdownOpen(true)}
+                onMouseLeave={() => setAccountDropdownOpen(false)}
+              >
+                <button className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200/60">
+                  <span className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    {trainee?.name?.[0]?.toUpperCase() || (
+                      <User className="w-3.5 h-3.5" />
+                    )}
+                  </span>
+                  <span className="hidden lg:inline max-w-[100px] truncate">
+                    {trainee?.name?.split(" ")[0] || "Account"}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-400 transition-transform ${
+                      accountDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
+                <AnimatePresence>
+                  {accountDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-56 backdrop-blur-2xl bg-white/90 dark:bg-slate-900/90 rounded-2xl shadow-2xl border border-white/80 dark:border-white/10 p-2 z-50"
+                    >
+                      <Link
+                        to="/my-account"
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-white/80 dark:hover:bg-slate-800 transition-colors text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        <span>My Account</span>
+                      </Link>
+                      <button
+                        onClick={logout}
+                        className="w-full flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors text-sm font-semibold text-rose-600 dark:text-rose-400"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Log Out</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200/60"
+              >
+                <User className="w-4 h-4" />
+                <span>Login</span>
+              </Link>
+            )}
             {/* Apply Now Primary CTA */}
+
             <Link
               to="/apply"
               className="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-indigo-950/50 transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -561,7 +622,35 @@ export const Navbar: React.FC = () => {
                 Contact & Campus
               </Link>
             </div>
-
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/my-account"
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl font-medium text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 gap-2"
+                >
+                  <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>My Account ({trainee?.name?.split(" ")[0]})</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }}
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl font-medium text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 hover:bg-rose-50 dark:hover:bg-rose-950/30 gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Log Out</span>
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="w-full flex items-center justify-center py-2.5 rounded-xl font-medium text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 gap-2"
+              >
+                <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <span>Login / Register</span>
+              </Link>
+            )}
             {/* Mobile Actions */}
             <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
               <Link
