@@ -1,81 +1,164 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import confetti from 'canvas-confetti';
+// src/pages/ApplyPage.tsx
+import React, { useState, useEffect } from "react";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import confetti from "canvas-confetti";
 import {
   CheckCircle2,
-  FileCheck,
-  CreditCard,
-  User,
-  GraduationCap,
-  Calendar,
   ArrowRight,
   ArrowLeft,
-  Upload,
-  ShieldCheck,
-  Sparkles,
-  PhoneCall
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { coursesData } from '../data/coursesData';
+  Calendar,
+  MapPin,
+  AlertCircle,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { fetchPublicCourses, ApiCourse } from "../data/api/couAPi";
+import {
+  fetchSchedulesForCourse,
+  ApiScheduleForCourse,
+} from "../data/api/schedulesApi";
+import { createBooking } from "../data/api/bookingsApi";
+import { useTraineeAuth } from "../context/TraineeAuthContext";
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function gbp(n?: number | null) {
+  if (n === null || n === undefined) return "\u2014";
+  return `\u00a3${Number(n).toFixed(2)}`;
+}
 
 export const ApplyPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const preselectedCourse = searchParams.get('course') || '';
+  const preselectedCourseTitle = searchParams.get("course") || "";
+  const navigate = useNavigate();
+  const { trainee } = useTraineeAuth();
 
   const [step, setStep] = useState<number>(1);
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  const [applicationRef, setApplicationRef] = useState<string>('');
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [bookingRef, setBookingRef] = useState("");
 
-  // Form State
-  const [formData, setFormData] = useState({
-    courseTitle: preselectedCourse || coursesData[0].title,
-    studyMode: 'Classroom (Central London Campus)',
-    preferredIntake: 'Autumn Intake (September 2026)',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    dob: '',
-    nationality: 'United Kingdom',
-    currentEducation: 'Secondary School (GCSE / Equivalent)',
-    hasEnglishProficiency: 'Yes',
-    paymentPlan: 'Full Payment (10% Discount Applied)',
-    termsAccepted: false
-  });
+  const [courses, setCourses] = useState<ApiCourse[]>([]);
+  const [coursesLoading, setCoursesLoading] = useState(true);
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
+  const [schedules, setSchedules] = useState<ApiScheduleForCourse[]>([]);
+  const [schedulesLoading, setSchedulesLoading] = useState(false);
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
+    null,
+  );
+
+  const [notes, setNotes] = useState("");
+  const [specialRequirements, setSpecialRequirements] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load all published courses once
   useEffect(() => {
-    if (preselectedCourse) {
-      setFormData((prev) => ({ ...prev, courseTitle: preselectedCourse }));
-    }
-  }, [preselectedCourse]);
+    let cancelled = false;
+    fetchPublicCourses()
+      .then((data) => {
+        if (cancelled) return;
+        const safe = Array.isArray(data)
+          ? data.filter((c) => !!c && !!c.id)
+          : [];
+        setCourses(safe);
+        if (preselectedCourseTitle) {
+          const match = safe.find((c) => c.title === preselectedCourseTitle);
+          if (match) setSelectedCourseId(match.id);
+        } else if (safe.length > 0) {
+          setSelectedCourseId(safe[0].id);
+        }
+      })
+      .catch(
+        (err) =>
+          !cancelled && setError(err.message || "Could not load courses."),
+      )
+      .finally(() => !cancelled && setCoursesLoading(false));
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleNext = (e: React.FormEvent) => {
+  // Load schedules whenever the selected course changes
+  useEffect(() => {
+    if (!selectedCourseId) return;
+    setSchedulesLoading(true);
+    setSelectedScheduleId(null);
+    setError(null);
+    fetchSchedulesForCourse(selectedCourseId)
+      .then((data) =>
+        setSchedules(Array.isArray(data) ? data.filter((s) => !!s) : []),
+      )
+      .catch((err) =>
+        setError(err.message || "Could not load schedules for this course."),
+      )
+      .finally(() => setSchedulesLoading(false));
+  }, [selectedCourseId]);
+
+  const selectedCourse = courses.find((c) => c.id === selectedCourseId) || null;
+  const selectedSchedule =
+    schedules.find((s) => s.id === selectedScheduleId) || null;
+
+  const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    if (step === 1 && !selectedCourseId) {
+      setError("Please select a course to continue.");
+      return;
+    }
+    if (step === 2 && !selectedScheduleId) {
+      setError("Please select an available batch to continue.");
+      return;
+    }
+
     if (step < 3) {
       setStep((prev) => prev + 1);
-      window.scrollTo({ top: 200, behavior: 'smooth' });
-    } else {
-      // Final Submit
-      const randomRef = 'APX-' + Math.floor(100000 + Math.random() * 900000);
-      setApplicationRef(randomRef);
-      setIsCompleted(true);
+      window.scrollTo({ top: 200, behavior: "smooth" });
+      return;
+    }
 
-      // Trigger Confetti effect
-      confetti({
-        particleCount: 120,
-        spread: 70,
-        origin: { y: 0.6 }
+    // Final submit
+    if (!termsAccepted) {
+      setError("Please accept the terms of enrolment to continue.");
+      return;
+    }
+    if (!selectedCourseId || !selectedScheduleId) return;
+
+    setSubmitting(true);
+    try {
+      const result = await createBooking({
+        courseId: selectedCourseId,
+        scheduleId: selectedScheduleId,
+        notes: notes || undefined,
+        specialRequirements: specialRequirements || undefined,
       });
-      window.scrollTo({ top: 100, behavior: 'smooth' });
+      setBookingRef(result.bookingRef);
+      setIsCompleted(true);
+      confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+      window.scrollTo({ top: 100, behavior: "smooth" });
+    } catch (err: any) {
+      setError(
+        err.message || "Could not submit your application. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
       setStep((prev) => prev - 1);
-      window.scrollTo({ top: 200, behavior: 'smooth' });
+      window.scrollTo({ top: 200, behavior: "smooth" });
     }
   };
 
@@ -83,15 +166,13 @@ export const ApplyPage: React.FC = () => {
     <>
       <SEOHead
         title="Apply Online | Student Admission & Enrolment | Apex Academy"
-        description="Submit your online course application for accredited UK qualifications in SIA Security, CITB Construction, Care Diplomas, and University Degree Top-Up."
-        keywords="apply Apex Academy, student enrolment London, online course application, SIA registration"
+        description="Submit your online course application for accredited UK qualifications."
         canonicalUrl="https://apexacademy.ac.uk/apply"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Online Application' }]} />
+        <Breadcrumbs items={[{ label: "Online Application" }]} />
 
-        {/* Hero */}
         <section className="py-12 bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl">
@@ -102,41 +183,44 @@ export const ApplyPage: React.FC = () => {
                 Apex Academy Application Form
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Fast 3-step application. Receive your provisional admission offer and batch confirmation in minutes.
+                Select your course and batch, then confirm your booking in 3
+                quick steps.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Form Container */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          {/* Step Indicator */}
           {!isCompleted && (
             <div className="mb-8">
               <div className="flex items-center justify-between mb-2">
                 {[
-                  { num: 1, label: 'Course Selection' },
-                  { num: 2, label: 'Personal Details' },
-                  { num: 3, label: 'Payment & Confirm' }
+                  { num: 1, label: "Choose Course" },
+                  { num: 2, label: "Choose Batch" },
+                  { num: 3, label: "Confirm & Submit" },
                 ].map((s) => (
                   <div key={s.num} className="flex items-center space-x-2">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors ${
                         step >= s.num
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                          ? "bg-indigo-600 text-white"
+                          : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
                       }`}
                     >
-                      {step > s.num ? <CheckCircle2 className="w-4 h-4" /> : s.num}
+                      {step > s.num ? (
+                        <CheckCircle2 className="w-4 h-4" />
+                      ) : (
+                        s.num
+                      )}
                     </div>
-                    <span className={`text-xs font-semibold hidden sm:inline ${step >= s.num ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                    <span
+                      className={`text-xs font-semibold hidden sm:inline ${step >= s.num ? "text-slate-900 dark:text-white" : "text-slate-400"}`}
+                    >
                       {s.label}
                     </span>
                   </div>
                 ))}
               </div>
-
-              {/* Progress Bar */}
               <div className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-indigo-600 to-cyan-500 transition-all duration-300"
@@ -146,280 +230,276 @@ export const ApplyPage: React.FC = () => {
             </div>
           )}
 
-          {/* Form Card */}
           <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-700/80 shadow-xl">
             {isCompleted ? (
-              /* Success Submission View */
               <div className="text-center space-y-6 py-6">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-
                 <div className="space-y-2">
                   <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
                     Application Submitted Successfully
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-900 dark:text-white">
-                    Welcome to Apex Academy!
+                    Welcome to Apex Academy, {trainee?.name?.split(" ")[0]}!
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                    We have received your application for <strong>{formData.courseTitle}</strong>.
+                    We've received your booking for{" "}
+                    <strong>{selectedCourse?.title}</strong>. Your enrolment is
+                    now pending confirmation from our admissions team.
                   </p>
                 </div>
 
-                {/* Reference Card */}
                 <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-md mx-auto text-left space-y-2 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-                    <span className="font-bold text-slate-400 uppercase">Application Ref:</span>
-                    <strong className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">{applicationRef}</strong>
+                    <span className="font-bold text-slate-400 uppercase">
+                      Booking Ref:
+                    </span>
+                    <strong className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+                      {bookingRef}
+                    </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>Applicant:</span>
-                    <strong className="text-slate-900 dark:text-white">{formData.firstName} {formData.lastName}</strong>
+                    <span>Batch:</span>
+                    <strong className="text-slate-900 dark:text-white">
+                      {selectedSchedule &&
+                        `${formatDate(selectedSchedule.startDate)} \u2013 ${formatDate(selectedSchedule.endDate)}`}
+                    </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>Email:</span>
-                    <strong className="text-slate-900 dark:text-white">{formData.email}</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Intake:</span>
-                    <strong className="text-slate-900 dark:text-white">{formData.preferredIntake}</strong>
+                    <span>Venue:</span>
+                    <strong className="text-slate-900 dark:text-white">
+                      {selectedSchedule?.venue?.name},{" "}
+                      {selectedSchedule?.venue?.city}
+                    </strong>
                   </div>
                 </div>
 
                 <div className="pt-4 flex flex-wrap justify-center gap-3">
                   <Link
-                    to="/"
+                    to="/my-account"
                     className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
                   >
-                    Return to Home
+                    View My Bookings
                   </Link>
                   <Link
-                    to="/student-support"
+                    to="/"
                     className="px-6 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-colors"
                   >
-                    Explore Student Support
+                    Return to Home
                   </Link>
                 </div>
               </div>
             ) : (
-              /* Multi-Step Form */
               <form onSubmit={handleNext} className="space-y-6">
-                {/* STEP 1: Course & Intake Selection */}
+                {error && (
+                  <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-600 dark:text-red-300 flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                {/* STEP 1: Course Selection */}
                 {step === 1 && (
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-700">
-                      Step 1: Qualification & Timetable Selection
+                      Step 1: Select Your Qualification
                     </h3>
 
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Select Course / Qualification *
-                      </label>
+                    {coursesLoading ? (
+                      <div className="h-10 rounded-xl bg-slate-100 dark:bg-slate-900 animate-pulse" />
+                    ) : (
                       <select
-                        value={formData.courseTitle}
-                        onChange={(e) => setFormData({ ...formData, courseTitle: e.target.value })}
+                        value={selectedCourseId ?? ""}
+                        onChange={(e) =>
+                          setSelectedCourseId(Number(e.target.value))
+                        }
                         className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 font-medium"
                       >
-                        {coursesData.map((c) => (
-                          <option key={c.id} value={c.title}>
-                            {c.title} (£{c.price})
+                        {courses.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.title} ({gbp(c.discountedPrice ?? c.price)})
                           </option>
                         ))}
                       </select>
-                    </div>
+                    )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Preferred Study Mode *
-                        </label>
-                        <select
-                          value={formData.studyMode}
-                          onChange={(e) => setFormData({ ...formData, studyMode: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        >
-                          <option value="Classroom (Central London Campus)">Classroom (Central London Campus)</option>
-                          <option value="Online / Distance Learning">Online / Distance Learning</option>
-                          <option value="Weekend Intensive Batch">Weekend Intensive Batch</option>
-                        </select>
+                    {selectedCourse && (
+                      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
+                        {selectedCourse.shortDescription}
                       </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Preferred Intake *
-                        </label>
-                        <select
-                          value={formData.preferredIntake}
-                          onChange={(e) => setFormData({ ...formData, preferredIntake: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        >
-                          <option value="Upcoming Monday Batch (Fast-Track)">Upcoming Monday Batch (Fast-Track)</option>
-                          <option value="Autumn Intake (September 2026)">Autumn Intake (September 2026)</option>
-                          <option value="Winter Intake (November 2026)">Winter Intake (November 2026)</option>
-                          <option value="Spring Intake (January 2027)">Spring Intake (January 2027)</option>
-                        </select>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
 
-                {/* STEP 2: Personal & Contact Information */}
+                {/* STEP 2: Schedule Selection */}
                 {step === 2 && (
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-700">
-                      Step 2: Personal & Contact Information
+                      Step 2: Select Your Batch
                     </h3>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          First Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.firstName}
-                          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                          placeholder="e.g. John"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
+                    {schedulesLoading ? (
+                      <div className="space-y-2">
+                        {[0, 1].map((i) => (
+                          <div
+                            key={i}
+                            className="h-16 rounded-2xl bg-slate-100 dark:bg-slate-900 animate-pulse"
+                          />
+                        ))}
                       </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Last Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.lastName}
-                          onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                          placeholder="e.g. Smith"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
+                    ) : schedules.length === 0 ? (
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                        No upcoming batches are scheduled for this course right
+                        now. Please choose a different course or check back
+                        soon.
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {schedules.map((sched) => {
+                          const seatsLeft = Math.max(
+                            0,
+                            (sched.maxStudents ?? 0) -
+                              (sched.currentStudents ?? 0),
+                          );
+                          const isFull = seatsLeft <= 0;
+                          const isSelected = selectedScheduleId === sched.id;
+                          return (
+                            <label
+                              key={sched.id}
+                              className={`p-4 rounded-2xl border flex items-center justify-between gap-3 flex-wrap transition-all ${
+                                isFull
+                                  ? "opacity-50 cursor-not-allowed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900"
+                                  : isSelected
+                                    ? "border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/60 cursor-pointer"
+                                    : "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:border-indigo-300 cursor-pointer"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <input
+                                  type="radio"
+                                  name="schedule"
+                                  disabled={isFull}
+                                  checked={isSelected}
+                                  onChange={() =>
+                                    setSelectedScheduleId(sched.id)
+                                  }
+                                  className="text-indigo-600 focus:ring-indigo-500"
+                                />
+                                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                                  <Calendar className="w-5 h-5" />
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                                    {formatDate(sched.startDate)} \u2013{" "}
+                                    {formatDate(sched.endDate)}
+                                  </h4>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" />
+                                    {sched.venue?.name}, {sched.venue?.city}
+                                  </p>
+                                </div>
+                              </div>
+                              <span
+                                className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                                  isFull
+                                    ? "bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300"
+                                    : "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300"
+                                }`}
+                              >
+                                {isFull
+                                  ? "Full"
+                                  : `${seatsLeft} Seats Available`}
+                              </span>
+                            </label>
+                          );
+                        })}
                       </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="john.smith@example.com"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Phone Number (UK or Int.) *
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+44 7123 456789"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Date of Birth *
-                        </label>
-                        <input
-                          type="date"
-                          required
-                          value={formData.dob}
-                          onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                          Nationality *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.nationality}
-                          onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
-                          placeholder="e.g. British, Bangladeshi, Nigerian..."
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
 
-                {/* STEP 3: Payment Plan & Confirmation */}
+                {/* STEP 3: Confirmation */}
                 {step === 3 && (
                   <div className="space-y-4">
                     <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-700">
-                      Step 3: Tuition Fee Payment Plan & Confirmation
+                      Step 3: Review & Confirm
                     </h3>
 
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Select Payment Preference *
-                      </label>
-                      <div className="grid grid-cols-1 gap-2.5">
-                        {[
-                          { id: 'Full Payment (10% Discount Applied)', label: 'Pay in Full (10% Early Bird Discount Applied)' },
-                          { id: 'Deposit Only (£99 To Secure Seat)', label: 'Pay £99 Seat Deposit (Remainder due on day 1)' },
-                          { id: '0% Interest Monthly Instalment Plan', label: '3-Month 0% Interest Instalment Plan' }
-                        ].map((plan) => (
-                          <label
-                            key={plan.id}
-                            className={`p-3.5 rounded-2xl border flex items-center space-x-3 cursor-pointer transition-all ${
-                              formData.paymentPlan === plan.id
-                                ? 'border-indigo-600 bg-indigo-50/60 dark:bg-indigo-950/60'
-                                : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name="paymentPlan"
-                              checked={formData.paymentPlan === plan.id}
-                              onChange={() => setFormData({ ...formData, paymentPlan: plan.id })}
-                              className="text-indigo-600 focus:ring-indigo-500"
-                            />
-                            <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-                              {plan.label}
-                            </span>
-                          </label>
-                        ))}
+                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                      <div className="flex justify-between">
+                        <span>Course:</span>
+                        <strong className="text-slate-900 dark:text-white">
+                          {selectedCourse?.title}
+                        </strong>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Batch:</span>
+                        <strong className="text-slate-900 dark:text-white">
+                          {selectedSchedule &&
+                            `${formatDate(selectedSchedule.startDate)} \u2013 ${formatDate(selectedSchedule.endDate)}`}
+                        </strong>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Venue:</span>
+                        <strong className="text-slate-900 dark:text-white">
+                          {selectedSchedule?.venue?.name},{" "}
+                          {selectedSchedule?.venue?.city}
+                        </strong>
+                      </div>
+                      <div className="flex justify-between pt-2 border-t border-slate-200 dark:border-slate-800">
+                        <span>Total Fee:</span>
+                        <strong className="text-indigo-600 dark:text-indigo-400">
+                          {gbp(
+                            selectedCourse?.discountedPrice ??
+                              selectedCourse?.price,
+                          )}
+                        </strong>
                       </div>
                     </div>
 
-                    <div className="pt-2">
-                      <label className="flex items-start space-x-2.5 cursor-pointer text-xs text-slate-600 dark:text-slate-300">
-                        <input
-                          type="checkbox"
-                          required
-                          checked={formData.termsAccepted}
-                          onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
-                          className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <span>
-                          I agree to Apex Academy's Terms of Enrolment, Privacy Policy, and confirm all submitted personal information is accurate.
-                        </span>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        Special Requirements (optional)
                       </label>
+                      <textarea
+                        value={specialRequirements}
+                        onChange={(e) => setSpecialRequirements(e.target.value)}
+                        rows={2}
+                        placeholder="e.g. Wheelchair access needed"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                      />
                     </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                        Additional Notes (optional)
+                      </label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        rows={2}
+                        placeholder="Anything else we should know?"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+
+                    <label className="flex items-start space-x-2.5 cursor-pointer text-xs text-slate-600 dark:text-slate-300 pt-2">
+                      <input
+                        type="checkbox"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500"
+                      />
+                      <span>
+                        I agree to Apex Academy's Terms of Enrolment and Privacy
+                        Policy, and confirm all submitted information is
+                        accurate.
+                      </span>
+                    </label>
                   </div>
                 )}
 
-                {/* Form Buttons */}
                 <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
                   {step > 1 ? (
                     <button
@@ -436,9 +516,16 @@ export const ApplyPage: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-600/30 transition-all flex items-center gap-2"
+                    disabled={submitting || coursesLoading}
+                    className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-600/30 transition-all flex items-center gap-2 disabled:opacity-60"
                   >
-                    <span>{step === 3 ? 'Confirm & Submit Enrolment' : 'Continue to Next Step'}</span>
+                    <span>
+                      {submitting
+                        ? "Submitting\u2026"
+                        : step === 3
+                          ? "Confirm & Submit Booking"
+                          : "Continue to Next Step"}
+                    </span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

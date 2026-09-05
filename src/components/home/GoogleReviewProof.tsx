@@ -1,5 +1,5 @@
-import React from 'react';
-import { Star, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import React from "react";
+import { Star, CheckCircle2 } from "lucide-react";
 
 export const GoogleReviewProof: React.FC = () => {
   return (
@@ -18,9 +18,13 @@ export const GoogleReviewProof: React.FC = () => {
                   <Star key={i} className="w-4 h-4 fill-current" />
                 ))}
               </div>
-              <span className="text-xs text-slate-400 font-medium">(580+ Google Reviews)</span>
+              <span className="text-xs text-slate-400 font-medium">
+                (580+ Google Reviews)
+              </span>
             </div>
-            <p className="text-xs text-slate-400">Rated "Excellent" for London Vocational & Higher Education</p>
+            <p className="text-xs text-slate-400">
+              Rated "Excellent" for London Vocational & Higher Education
+            </p>
           </div>
         </div>
 

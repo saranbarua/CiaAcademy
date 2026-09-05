@@ -16,7 +16,6 @@ import {
   Languages,
   Award,
   ArrowRight,
-  Sparkles,
   PhoneCall,
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
@@ -107,7 +106,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Courses", path: "/courses", hasMegaMenu: true },
+    { name: "Courses", path: "/courses" },
     { name: "Study in UK", path: "/study-in-uk" },
     {
       name: "Resources",
