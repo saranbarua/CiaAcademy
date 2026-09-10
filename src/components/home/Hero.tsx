@@ -101,9 +101,8 @@ export const Hero: React.FC = () => {
             >
               Fast-track your career with industry-recognized certifications in{" "}
               <strong>Security (SIA)</strong>,{" "}
-              <strong>Construction (CSCS)</strong>,{" "}
-              <strong>Health & Social Care</strong>,{" "}
-              <strong>Business Leadership</strong>, and international{" "}
+              <strong>Construction (CSCS),</strong>,{" "}
+              <strong>professional training</strong>,{" "}
               <strong>UK University Pathways</strong>.
             </motion.p>
 
@@ -145,7 +144,7 @@ export const Hero: React.FC = () => {
             >
               <div>
                 <div className="flex items-center text-slate-900 dark:text-white font-extrabold text-xl sm:text-2xl font-display">
-                  <span>96.4%</span>
+                  <span>95%</span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   First-Time Pass Rate
@@ -196,7 +195,7 @@ export const Hero: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
                       <span className="text-xs font-bold text-slate-900 dark:text-white">
-                        Central London Campus
+                        Ilford Campus
                       </span>
                     </div>
                     <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
@@ -205,7 +204,7 @@ export const Hero: React.FC = () => {
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 flex items-center">
                     <MapPin className="w-3.5 h-3.5 mr-1 text-indigo-500 flex-shrink-0" />
-                    Commercial Road, London E1 • Modern Training Suites
+                    : Lex House, 1-7 Hainault Street, Ilford • Weekly Intakes
                   </p>
                 </div>
 

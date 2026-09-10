@@ -156,19 +156,12 @@ export const Navbar: React.FC = () => {
             id="navbar-brand-logo"
             aria-label="Care International  Academy Home"
           >
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 dark:bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-300">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
             <div>
-              <span className="text-xl font-bold tracking-tight text-indigo-950 dark:text-white uppercase block leading-tight font-display">
-                Care International{" "}
-                <span className="text-indigo-600 dark:text-indigo-400">
-                  ACADEMY
-                </span>
-              </span>
-              <span className="text-[10px] tracking-widest uppercase font-semibold text-slate-500 dark:text-slate-400 block -mt-0.5">
-                UK Professional Education
-              </span>
+              <img
+                src="/assets/Images/logo.jpeg"
+                alt="UK Flag"
+                className="w-24 h-10 "
+              />
             </div>
           </Link>
 
