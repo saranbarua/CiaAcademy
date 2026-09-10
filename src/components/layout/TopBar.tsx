@@ -24,11 +24,11 @@ export const TopBar: React.FC = () => {
         {/* Right: Contact & Action Links */}
         <div className="flex items-center space-x-5 flex-shrink-0 font-medium">
           <a
-            href="tel:+442081234567"
+            href="tel:07495922582"
             className="flex items-center text-slate-300 hover:text-white transition-colors"
           >
             <Phone className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
-            <span>+44 (0) 20 8123 4567</span>
+            <span>07495922582</span>
           </a>
 
           <a
@@ -36,7 +36,8 @@ export const TopBar: React.FC = () => {
             className="hidden md:flex items-center text-slate-300 hover:text-white transition-colors"
           >
             <Mail className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
-            <span>admissions@Care International academy.ac.uk</span>
+            <span className="mr-2">info@careintltd.co.uk,</span>{" "}
+            <span> info@ciacademy.ac</span>
           </a>
 
           <button
