@@ -1,16 +1,16 @@
-import React from 'react';
-import { Shield, Award, CheckCircle2, Building, Sparkles } from 'lucide-react';
-import { partnersData } from '../../data/partnersData';
+import React from "react";
+import { Award } from "lucide-react";
+import { partnersData } from "../../data/partnersData";
 
 export const TrustPartners: React.FC = () => {
-  // Duplicate partners array for smooth seamless infinite marquee
   const marqueePartners = [...partnersData, ...partnersData];
 
   return (
     <section className="py-12 border-y border-white/60 dark:border-white/10 relative overflow-hidden backdrop-blur-md bg-white/40 dark:bg-slate-950/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
         <p className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          Recognised & Regulated By Premier UK Awarding Bodies & Industry Regulators
+          Recognised & Regulated By Premier UK Awarding Bodies & Industry
+          Regulators
         </p>
       </div>
 

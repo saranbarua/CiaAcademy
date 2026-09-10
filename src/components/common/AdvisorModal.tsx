@@ -16,16 +16,19 @@ import { createLead } from "../../data/api/leadsApi";
 import confetti from "canvas-confetti";
 
 const COURSE_OPTIONS = [
-  "SIA Door Supervisor Licence",
-  "SIA CCTV Operator Course",
-  "CSCS Green Card (Level 1 H&S)",
-  "CITB SSSTS Site Safety",
-  "Level 5 Diploma in Business (University Fast-Track)",
-  "Level 3 Diploma in Adult Care (RQF)",
-  "IELTS Academic Masterclass (Band 7.5+)",
-  "ACCA Foundation in Accountancy",
-  "Study in the UK / University Admissions",
-  "General Course Guidance",
+  "Level 2 Award for Door Supervisors in the Private Security Industry",
+  "Level 2 Award for CCTV Operators (Public Space Surveillance) in the Private Security Industry",
+  "Level 2 Award for Door Supervisors in the Private Security Industry (Refresher)",
+  "Level 3 Certificate for Close Protection Operatives in the Private Security Industry",
+  "Level 2 Certificate in Spectator Safety",
+  "Level 1 Award in Health and Safety within a Construction Environment",
+  "Level 3 Diploma in Care",
+  "Emergency First Aid Course",
+  "Level 1 Award in the Principles of Fire Safety Awareness",
+  "Level 2 Award in Food Safety for Retail",
+  "Level 3 Award in Food Safety for Retail",
+  "Level 2 Award in Safe Moving and Handling",
+  "ACCA CITB Approved Exam Centre",
 ];
 
 export const AdvisorModal: React.FC = () => {

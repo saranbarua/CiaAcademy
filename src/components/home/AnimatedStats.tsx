@@ -1,8 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useInView, useSpring, useTransform } from 'motion/react';
-import { GraduationCap, BookOpenCheck, Award, Building2, Handshake, Star } from 'lucide-react';
-import { statsData } from '../../data/statsData';
-import { StatItem } from '../../types';
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "motion/react";
+import {
+  GraduationCap,
+  BookOpenCheck,
+  Award,
+  Building2,
+  Handshake,
+  Star,
+} from "lucide-react";
+import { statsData } from "../../data/statsData";
 
 interface CounterProps {
   value: number;
@@ -11,7 +17,7 @@ interface CounterProps {
 
 const AnimatedCounter: React.FC<CounterProps> = ({ value, suffix }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
@@ -30,7 +36,9 @@ const AnimatedCounter: React.FC<CounterProps> = ({ value, suffix }) => {
         setDisplayValue(value);
         clearInterval(timer);
       } else {
-        setDisplayValue(isDecimal ? parseFloat(start.toFixed(1)) : Math.floor(start));
+        setDisplayValue(
+          isDecimal ? parseFloat(start.toFixed(1)) : Math.floor(start),
+        );
       }
     }, stepTime);
 
@@ -48,13 +56,20 @@ const AnimatedCounter: React.FC<CounterProps> = ({ value, suffix }) => {
 export const AnimatedStats: React.FC = () => {
   const getStatIcon = (iconName: string) => {
     switch (iconName) {
-      case 'GraduationCap': return <GraduationCap className="w-6 h-6 text-indigo-500" />;
-      case 'BookOpenCheck': return <BookOpenCheck className="w-6 h-6 text-cyan-500" />;
-      case 'Award': return <Award className="w-6 h-6 text-violet-500" />;
-      case 'Building2': return <Building2 className="w-6 h-6 text-emerald-500" />;
-      case 'Handshake': return <Handshake className="w-6 h-6 text-blue-500" />;
-      case 'Star': return <Star className="w-6 h-6 text-amber-500" />;
-      default: return <Award className="w-6 h-6 text-indigo-500" />;
+      case "GraduationCap":
+        return <GraduationCap className="w-6 h-6 text-indigo-500" />;
+      case "BookOpenCheck":
+        return <BookOpenCheck className="w-6 h-6 text-cyan-500" />;
+      case "Award":
+        return <Award className="w-6 h-6 text-violet-500" />;
+      case "Building2":
+        return <Building2 className="w-6 h-6 text-emerald-500" />;
+      case "Handshake":
+        return <Handshake className="w-6 h-6 text-blue-500" />;
+      case "Star":
+        return <Star className="w-6 h-6 text-amber-500" />;
+      default:
+        return <Award className="w-6 h-6 text-indigo-500" />;
     }
   };
 
@@ -73,7 +88,8 @@ export const AnimatedStats: React.FC = () => {
             Transforming Careers Across The UK & Worldwide
           </h2>
           <p className="text-sm sm:text-base text-slate-400 mt-3">
-            Our numbers reflect our commitment to academic rigor, student satisfaction, and real-world employment outcomes.
+            Our numbers reflect our commitment to academic rigor, student
+            satisfaction, and real-world employment outcomes.
           </p>
         </div>
 
@@ -93,8 +109,12 @@ export const AnimatedStats: React.FC = () => {
               <div className="text-2xl sm:text-3xl font-extrabold font-display text-white mb-1 tracking-tight">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               </div>
-              <h3 className="text-xs font-bold text-slate-200 mb-1">{stat.label}</h3>
-              <p className="text-[11px] text-slate-400 line-clamp-2">{stat.description}</p>
+              <h3 className="text-xs font-bold text-slate-200 mb-1">
+                {stat.label}
+              </h3>
+              <p className="text-[11px] text-slate-400 line-clamp-2">
+                {stat.description}
+              </p>
             </motion.div>
           ))}
         </div>
