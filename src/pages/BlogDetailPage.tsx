@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -9,11 +9,11 @@ import {
   ArrowLeft,
   ArrowRight,
   Tag,
-  CheckCircle2
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { blogsData } from '../data/blogsData';
+  CheckCircle2,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { blogsData } from "../data/blogsData";
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -23,9 +23,16 @@ export const BlogDetailPage: React.FC = () => {
   if (!blog) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display mb-2">Article Not Found</h2>
-        <p className="text-sm text-slate-500 mb-6">The requested guide could not be found.</p>
-        <Link to="/blog" className="px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display mb-2">
+          Article Not Found
+        </h2>
+        <p className="text-sm text-slate-500 mb-6">
+          The requested guide could not be found.
+        </p>
+        <Link
+          to="/blog"
+          className="px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl"
+        >
           Back to Blog
         </Link>
       </div>
@@ -33,25 +40,25 @@ export const BlogDetailPage: React.FC = () => {
   }
 
   const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: blog.title,
     image: [blog.image],
     datePublished: blog.date,
     dateModified: blog.date,
     author: {
-      '@type': 'Person',
-      name: blog.author.name
+      "@type": "Person",
+      name: blog.author.name,
     },
     publisher: {
-      '@type': 'Organization',
-      name: 'Apex Academy of Professional Education',
+      "@type": "Organization",
+      name: "Care International  Academy of Professional Education",
       logo: {
-        '@type': 'ImageObject',
-        url: 'https://apexacademy.ac.uk/logo.png'
-      }
+        "@type": "ImageObject",
+        url: "https://Care International academy.ac.uk/logo.png",
+      },
     },
-    description: blog.excerpt
+    description: blog.excerpt,
   };
 
   const relatedArticles = blogsData.filter((b) => b.id !== blog.id).slice(0, 2);
@@ -59,19 +66,16 @@ export const BlogDetailPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title={`${blog.title} | Apex Academy Blog`}
+        title={`${blog.title} | Care International  Academy Blog`}
         description={blog.excerpt}
-        keywords={blog.tags.join(', ')}
-        canonicalUrl={`https://apexacademy.ac.uk/blog/${blog.slug}`}
+        keywords={blog.tags.join(", ")}
+        canonicalUrl={`https://Care International academy.ac.uk/blog/${blog.slug}`}
         schemaJson={articleSchema}
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
         <Breadcrumbs
-          items={[
-            { label: 'Blog', path: '/blog' },
-            { label: blog.title }
-          ]}
+          items={[{ label: "Blog", path: "/blog" }, { label: blog.title }]}
         />
 
         {/* Main Article Container */}
@@ -96,12 +100,26 @@ export const BlogDetailPage: React.FC = () => {
             <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-slate-700 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400 overflow-hidden">
-                  <img src={blog.author.avatar} alt={blog.author.name} className="w-full h-full object-cover" />
+                  <img
+                    src={blog.author.avatar}
+                    alt={blog.author.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white">{blog.author.name} <span className="font-normal text-xs text-slate-400">({blog.author.role})</span></p>
+                  <p className="font-bold text-slate-900 dark:text-white">
+                    {blog.author.name}{" "}
+                    <span className="font-normal text-xs text-slate-400">
+                      ({blog.author.role})
+                    </span>
+                  </p>
                   <p className="text-xs text-slate-500">
-                    Published on {new Date(blog.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    Published on{" "}
+                    {new Date(blog.date).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </p>
                 </div>
               </div>
@@ -110,7 +128,11 @@ export const BlogDetailPage: React.FC = () => {
 
           {/* Featured Image */}
           <div className="rounded-3xl overflow-hidden shadow-xl mb-10 aspect-[16/9] bg-slate-100 dark:bg-slate-900">
-            <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* Body Content */}

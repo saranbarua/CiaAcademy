@@ -18,9 +18,9 @@ export const HomePage: React.FC = () => {
   const homeSchema = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    name: "Apex Academy of Professional Education",
-    url: "https://apexacademy.ac.uk",
-    logo: "https://apexacademy.ac.uk/logo.png",
+    name: "Care International  Academy of Professional Education",
+    url: "https://Care International academy.ac.uk",
+    logo: "https://Care International academy.ac.uk/logo.png",
     description:
       "Premier UK education and training academy providing accredited SIA, CSCS, Health & Social Care, Business, and University Pathway qualifications.",
     address: {
@@ -32,19 +32,19 @@ export const HomePage: React.FC = () => {
     },
     telephone: "+44-20-8123-4567",
     sameAs: [
-      "https://facebook.com/apexacademyuk",
-      "https://linkedin.com/school/apexacademyuk",
-      "https://instagram.com/apexacademyuk",
+      "https://facebook.com/Care International academyuk",
+      "https://linkedin.com/school/Care International academyuk",
+      "https://instagram.com/Care International academyuk",
     ],
   };
 
   return (
     <>
       <SEOHead
-        title="Apex Academy | UK Accredited SIA, CSCS, Care & University Pathways"
-        description="Earn UK accredited qualifications in Security (SIA), Construction (CSCS), Health & Social Care, and Higher Education Bachelor/Master Degree Top-Up pathways at Apex Academy London."
-        keywords="Apex Academy, SIA course London, CSCS green card, health social care NVQ, UK university pathway, top up degree UK, study in UK international students"
-        canonicalUrl="https://apexacademy.ac.uk"
+        title="Care International  Academy | UK Accredited SIA, CSCS, Care & University Pathways"
+        description="Earn UK accredited qualifications in Security (SIA), Construction (CSCS), Health & Social Care, and Higher Education Bachelor/Master Degree Top-Up pathways at Care International  Academy London."
+        keywords="Care International  Academy, SIA course London, CSCS green card, health social care NVQ, UK university pathway, top up degree UK, study in UK international students"
+        canonicalUrl="https://Care International academy.ac.uk"
         schemaJson={homeSchema}
       />
 

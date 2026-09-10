@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React from "react";
+import { motion } from "motion/react";
 import {
   ShieldCheck,
   Award,
@@ -8,42 +8,48 @@ import {
   Briefcase,
   Globe2,
   CheckCircle2,
-  Sparkles
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Sparkles,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const WhyChooseUs: React.FC = () => {
   const features = [
     {
       icon: ShieldCheck,
-      title: 'Ofqual Regulated & SIA Approved',
-      description: 'Every certificate is backed by accredited UK awarding bodies including Highfield, Pearson, Qualsafe, and the Security Industry Authority.'
+      title: "Ofqual Regulated & SIA Approved",
+      description:
+        "Every certificate is backed by accredited UK awarding bodies including Highfield, Pearson, Qualsafe, and the Security Industry Authority.",
     },
     {
       icon: Award,
-      title: '96.4% First-Time Pass Guarantee',
-      description: 'Our proprietary question-drill system and practical physical simulations ensure unmatched first-time pass rates with free re-sits if needed.'
+      title: "96.4% First-Time Pass Guarantee",
+      description:
+        "Our proprietary question-drill system and practical physical simulations ensure unmatched first-time pass rates with free re-sits if needed.",
     },
     {
       icon: Users,
-      title: 'Industry Veteran Instructors',
-      description: 'Learn directly from seasoned security directors, senior NHS nurses, certified British Council examiners, and chartered accountants.'
+      title: "Industry Veteran Instructors",
+      description:
+        "Learn directly from seasoned security directors, senior NHS nurses, certified British Council examiners, and chartered accountants.",
     },
     {
       icon: Clock,
-      title: 'Fast-Track Results & Instant Uploads',
-      description: 'Exam results processed in 5-7 business days with direct electronic uploads to the SIA and CITB national databases.'
+      title: "Fast-Track Results & Instant Uploads",
+      description:
+        "Exam results processed in 5-7 business days with direct electronic uploads to the SIA and CITB national databases.",
     },
     {
       icon: Briefcase,
-      title: 'Free CV Review & Job Assistance',
-      description: 'Access our dedicated career clinic with active vacancy referrals across security venues, construction sites, and NHS care providers.'
+      title: "Free CV Review & Job Assistance",
+      description:
+        "Access our dedicated career clinic with active vacancy referrals across security venues, construction sites, and NHS care providers.",
     },
     {
       icon: Globe2,
-      title: 'International Student & Visa Pathways',
-      description: 'Full CAS documentation auditing, Statement of Purpose guidance, and direct university Bachelor/Master top-up agreements.'
-    }
+      title: "International Student & Visa Pathways",
+      description:
+        "Full CAS documentation auditing, Statement of Purpose guidance, and direct university Bachelor/Master top-up agreements.",
+    },
   ];
 
   return (
@@ -55,7 +61,7 @@ export const WhyChooseUs: React.FC = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
               <img
                 src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80"
-                alt="Interactive Training Session at Apex Academy"
+                alt="Interactive Training Session at Care International  Academy"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
@@ -67,8 +73,12 @@ export const WhyChooseUs: React.FC = () => {
                     <Award className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">UK Centre of Academic Quality</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">12+ Years of Trusted Training in London</p>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                      UK Centre of Academic Quality
+                    </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      12+ Years of Trusted Training in London
+                    </p>
                   </div>
                 </div>
               </div>
@@ -77,7 +87,9 @@ export const WhyChooseUs: React.FC = () => {
             {/* Decorative Floating Floating Badge */}
             <div className="hidden sm:flex absolute -top-4 -right-4 p-3 rounded-2xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 items-center space-x-2.5">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-              <span className="text-xs font-bold text-slate-900 dark:text-white">96.4% Verified Pass Rate</span>
+              <span className="text-xs font-bold text-slate-900 dark:text-white">
+                96.4% Verified Pass Rate
+              </span>
             </div>
           </div>
 
@@ -91,7 +103,10 @@ export const WhyChooseUs: React.FC = () => {
                 The Gold Standard in UK Vocational & Degree Preparation
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2">
-                Whether you need a fast-track licence to start working next week or a prestigious higher diploma to complete your degree, Apex Academy delivers certified excellence at every step.
+                Whether you need a fast-track licence to start working next week
+                or a prestigious higher diploma to complete your degree, Care
+                International Academy delivers certified excellence at every
+                step.
               </p>
             </div>
 

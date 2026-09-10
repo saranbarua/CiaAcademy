@@ -1,56 +1,85 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, X, Send, Bot, User, CheckCircle2, PhoneCall } from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  MessageSquare,
+  X,
+  Send,
+  Bot,
+  User,
+  CheckCircle2,
+  PhoneCall,
+} from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export const LiveChatWidget: React.FC = () => {
   const { openAdvisorModal } = useModal();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{ sender: 'bot' | 'user'; text: string }>>([
+  const [messages, setMessages] = useState<
+    Array<{ sender: "bot" | "user"; text: string }>
+  >([
     {
-      sender: 'bot',
-      text: 'Hello! 👋 Welcome to Apex Academy London. How can we assist you with our accredited qualifications or student admissions today?'
-    }
+      sender: "bot",
+      text: "Hello! 👋 Welcome to Care International  Academy London. How can we assist you with our accredited qualifications or student admissions today?",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const quickPrompts = [
-    'How do I get an SIA licence?',
-    'What are the course dates for CSCS?',
-    'Tell me about University Top-Up',
-    'How much is the deposit?'
+    "How do I get an SIA licence?",
+    "What are the course dates for CSCS?",
+    "Tell me about University Top-Up",
+    "How much is the deposit?",
   ];
 
   const handleSend = (userText: string) => {
     if (!userText.trim()) return;
 
-    const newMsgs = [...messages, { sender: 'user' as const, text: userText }];
+    const newMsgs = [...messages, { sender: "user" as const, text: userText }];
     setMessages(newMsgs);
-    setInput('');
+    setInput("");
 
     // Generate intelligent instant bot replies
     setTimeout(() => {
-      let botResponse = 'Thank you for your question! Our course advisors are ready to assist you in detail.';
+      let botResponse =
+        "Thank you for your question! Our course advisors are ready to assist you in detail.";
       const lower = userText.toLowerCase();
 
-      if (lower.includes('sia') || lower.includes('security')) {
-        botResponse = 'Our SIA Door Supervisor (6-Day) and CCTV (3-Day) courses run weekly at our London campus. Tuition starts from £199 with a free re-sit guarantee and exam portal access!';
-      } else if (lower.includes('cscs') || lower.includes('construction')) {
-        botResponse = 'Our 1-Day CSCS Green Card training includes the Level 1 Health & Safety in Construction Environment award plus CITB test booking support for £149.';
-      } else if (lower.includes('top-up') || lower.includes('university') || lower.includes('degree')) {
-        botResponse = 'Apex Academy offers Ofqual Level 4 & 5 Extended Diplomas (240 credits) which give you direct progression into the final Year 3 (Top-Up) of UK Bachelor Degrees, saving you over £25,000!';
-      } else if (lower.includes('deposit') || lower.includes('cost') || lower.includes('fee') || lower.includes('price')) {
-        botResponse = 'You can secure your seat in any upcoming batch with a £99 deposit! We also offer 0% interest monthly instalment plans for higher diplomas.';
-      } else if (lower.includes('visa') || lower.includes('international') || lower.includes('cas')) {
-        botResponse = 'We support international students from over 40 countries with CAS issuance, 28-day financial rule validation, and UK Student Route visa guidance.';
+      if (lower.includes("sia") || lower.includes("security")) {
+        botResponse =
+          "Our SIA Door Supervisor (6-Day) and CCTV (3-Day) courses run weekly at our London campus. Tuition starts from £199 with a free re-sit guarantee and exam portal access!";
+      } else if (lower.includes("cscs") || lower.includes("construction")) {
+        botResponse =
+          "Our 1-Day CSCS Green Card training includes the Level 1 Health & Safety in Construction Environment award plus CITB test booking support for £149.";
+      } else if (
+        lower.includes("top-up") ||
+        lower.includes("university") ||
+        lower.includes("degree")
+      ) {
+        botResponse =
+          "Care International  Academy offers Ofqual Level 4 & 5 Extended Diplomas (240 credits) which give you direct progression into the final Year 3 (Top-Up) of UK Bachelor Degrees, saving you over £25,000!";
+      } else if (
+        lower.includes("deposit") ||
+        lower.includes("cost") ||
+        lower.includes("fee") ||
+        lower.includes("price")
+      ) {
+        botResponse =
+          "You can secure your seat in any upcoming batch with a £99 deposit! We also offer 0% interest monthly instalment plans for higher diplomas.";
+      } else if (
+        lower.includes("visa") ||
+        lower.includes("international") ||
+        lower.includes("cas")
+      ) {
+        botResponse =
+          "We support international students from over 40 countries with CAS issuance, 28-day financial rule validation, and UK Student Route visa guidance.";
       }
 
       setMessages((prev) => [
         ...prev,
         {
-          sender: 'bot',
-          text: botResponse
-        }
+          sender: "bot",
+          text: botResponse,
+        },
       ]);
     }, 600);
   };
@@ -73,7 +102,9 @@ export const LiveChatWidget: React.FC = () => {
                   <Bot className="w-5 h-5 text-cyan-300" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold font-display leading-tight">Apex Academy Live Desk</h4>
+                  <h4 className="text-sm font-bold font-display leading-tight">
+                    Care International Academy Live Desk
+                  </h4>
                   <div className="flex items-center space-x-1.5 text-[11px] text-cyan-300">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Advisors Online Now</span>
@@ -94,13 +125,13 @@ export const LiveChatWidget: React.FC = () => {
               {messages.map((m, idx) => (
                 <div
                   key={idx}
-                  className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[82%] p-3 rounded-2xl leading-relaxed ${
-                      m.sender === 'user'
-                        ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-br-none shadow-md'
-                        : 'bg-white/80 dark:bg-slate-800/80 backdrop-blur-md text-slate-800 dark:text-slate-200 rounded-bl-none border border-white/80 dark:border-white/10 shadow-xs'
+                      m.sender === "user"
+                        ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-br-none shadow-md"
+                        : "bg-white/80 dark:bg-slate-800/80 backdrop-blur-md text-slate-800 dark:text-slate-200 rounded-bl-none border border-white/80 dark:border-white/10 shadow-xs"
                     }`}
                   >
                     {m.text}

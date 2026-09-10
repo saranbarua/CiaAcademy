@@ -79,9 +79,9 @@ export const TraineeRegisterPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Create Student Account | Apex Academy"
+        title="Create Student Account | Care International  Academy"
         description="Register a free student account to book courses, track certificates, and manage your enrolments."
-        canonicalUrl="https://apexacademy.ac.uk/register"
+        canonicalUrl="https://Care International academy.ac.uk/register"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen">

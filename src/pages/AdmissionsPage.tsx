@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   Calendar,
   FileCheck,
@@ -12,58 +12,58 @@ import {
   ArrowRight,
   ShieldCheck,
   Building,
-  GraduationCap
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { useModal } from '../context/ModalContext';
-import { CTASection } from '../components/home/CTASection';
+  GraduationCap,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useModal } from "../context/ModalContext";
+import { CTASection } from "../components/home/CTASection";
 
 export const AdmissionsPage: React.FC = () => {
   const { openAdvisorModal, openBrochureModal } = useModal();
 
   const intakes = [
     {
-      term: 'Autumn Intake 2026',
-      status: 'Open for Registration (High Demand)',
-      startDate: '15 September 2026',
-      deadline: '31 August 2026',
-      type: 'All Vocational, Professional & Degree Top-Up Courses'
+      term: "Autumn Intake 2026",
+      status: "Open for Registration (High Demand)",
+      startDate: "15 September 2026",
+      deadline: "31 August 2026",
+      type: "All Vocational, Professional & Degree Top-Up Courses",
     },
     {
-      term: 'Winter Intake 2026/27',
-      status: 'Admissions Open',
-      startDate: '10 November 2026',
-      deadline: '25 October 2026',
-      type: 'SIA, CSCS, Care Diplomas & IELTS Batches'
+      term: "Winter Intake 2026/27",
+      status: "Admissions Open",
+      startDate: "10 November 2026",
+      deadline: "25 October 2026",
+      type: "SIA, CSCS, Care Diplomas & IELTS Batches",
     },
     {
-      term: 'Spring Intake 2027',
-      status: 'Early Bird Registration Open',
-      startDate: '18 January 2027',
-      deadline: '05 January 2027',
-      type: 'All Higher Education Diplomas & Top-Up Routes'
+      term: "Spring Intake 2027",
+      status: "Early Bird Registration Open",
+      startDate: "18 January 2027",
+      deadline: "05 January 2027",
+      type: "All Higher Education Diplomas & Top-Up Routes",
     },
     {
-      term: 'Weekly Vocational Intakes',
-      status: 'Ongoing Continuous Intakes',
-      startDate: 'Every Monday & Wednesday',
-      deadline: 'Rolling 48-Hour Enrolment',
-      type: 'SIA Door Supervisor, CCTV, CSCS Green Card'
-    }
+      term: "Weekly Vocational Intakes",
+      status: "Ongoing Continuous Intakes",
+      startDate: "Every Monday & Wednesday",
+      deadline: "Rolling 48-Hour Enrolment",
+      type: "SIA Door Supervisor, CCTV, CSCS Green Card",
+    },
   ];
 
   return (
     <>
       <SEOHead
-        title="Admissions & Intakes 2026/2027 | Apex Academy London"
+        title="Admissions & Intakes 2026/2027 | Care International  Academy London"
         description="Explore upcoming intake dates, entry requirements, payment plans, and step-by-step application instructions for UK professional courses and higher education."
-        keywords="Apex Academy admissions, UK course intakes 2026, SIA intake London, university top up application, student payment plans"
-        canonicalUrl="https://apexacademy.ac.uk/admissions"
+        keywords="Care International  Academy admissions, UK course intakes 2026, SIA intake London, university top up application, student payment plans"
+        canonicalUrl="https://Care International academy.ac.uk/admissions"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Admissions & Intakes' }]} />
+        <Breadcrumbs items={[{ label: "Admissions & Intakes" }]} />
 
         {/* Hero */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -76,7 +76,10 @@ export const AdmissionsPage: React.FC = () => {
                 Simple, Fast & Transparent Admissions
               </h1>
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                Whether enrolling in our weekly SIA or CSCS fast-track batches or applying for our autumn/spring university top-up diplomas, our admissions officers are here to support you at every milestone.
+                Whether enrolling in our weekly SIA or CSCS fast-track batches
+                or applying for our autumn/spring university top-up diplomas,
+                our admissions officers are here to support you at every
+                milestone.
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
@@ -86,7 +89,7 @@ export const AdmissionsPage: React.FC = () => {
                   Start Online Application
                 </Link>
                 <button
-                  onClick={() => openAdvisorModal('Admissions Query')}
+                  onClick={() => openAdvisorModal("Admissions Query")}
                   className="px-6 py-3.5 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors"
                 >
                   Request Callback from Admissions
@@ -127,8 +130,12 @@ export const AdmissionsPage: React.FC = () => {
                     <strong>Applicable For:</strong> {intake.type}
                   </p>
                   <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs text-slate-700 dark:text-slate-300">
-                    <span><strong>Starts:</strong> {intake.startDate}</span>
-                    <span><strong>Deadline:</strong> {intake.deadline}</span>
+                    <span>
+                      <strong>Starts:</strong> {intake.startDate}
+                    </span>
+                    <span>
+                      <strong>Deadline:</strong> {intake.deadline}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -141,17 +148,22 @@ export const AdmissionsPage: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-indigo-900 via-slate-900 to-violet-950 text-white border border-indigo-700/60 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8 space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">Flexible Financing</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                  Flexible Financing
+                </span>
                 <h3 className="text-2xl sm:text-3xl font-bold font-display">
                   0% Interest Student Instalment Plans Available
                 </h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  We believe financial constraints should never hold you back. Pay a small registration deposit upon enrollment, and spread the remainder across manageable monthly instalments with zero interest charges.
+                  We believe financial constraints should never hold you back.
+                  Pay a small registration deposit upon enrollment, and spread
+                  the remainder across manageable monthly instalments with zero
+                  interest charges.
                 </p>
               </div>
               <div className="lg:col-span-4 text-center lg:text-right">
                 <button
-                  onClick={() => openAdvisorModal('Instalment Plan Inquiry')}
+                  onClick={() => openAdvisorModal("Instalment Plan Inquiry")}
                   className="px-6 py-3.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition-all"
                 >
                   Inquire About Payment Plans

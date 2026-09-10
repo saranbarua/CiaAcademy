@@ -165,9 +165,9 @@ export const ApplyPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Apply Online | Student Admission & Enrolment | Apex Academy"
+        title="Apply Online | Student Admission & Enrolment | Care International  Academy"
         description="Submit your online course application for accredited UK qualifications."
-        canonicalUrl="https://apexacademy.ac.uk/apply"
+        canonicalUrl="https://Care International academy.ac.uk/apply"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
@@ -180,7 +180,7 @@ export const ApplyPage: React.FC = () => {
                 Official Enrolment Portal
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-white">
-                Apex Academy Application Form
+                Care International Academy Application Form
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
                 Select your course and batch, then confirm your booking in 3
@@ -241,7 +241,8 @@ export const ApplyPage: React.FC = () => {
                     Application Submitted Successfully
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-slate-900 dark:text-white">
-                    Welcome to Apex Academy, {trainee?.name?.split(" ")[0]}!
+                    Welcome to Care International Academy,{" "}
+                    {trainee?.name?.split(" ")[0]}!
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
                     We've received your booking for{" "}
@@ -492,9 +493,9 @@ export const ApplyPage: React.FC = () => {
                         className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500"
                       />
                       <span>
-                        I agree to Apex Academy's Terms of Enrolment and Privacy
-                        Policy, and confirm all submitted information is
-                        accurate.
+                        I agree to Care International Academy's Terms of
+                        Enrolment and Privacy Policy, and confirm all submitted
+                        information is accurate.
                       </span>
                     </label>
                   </div>

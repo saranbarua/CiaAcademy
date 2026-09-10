@@ -22,7 +22,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("apex_theme", theme);
+    localStorage.setItem("Care International _theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {

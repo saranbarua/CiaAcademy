@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   GraduationCap,
   Mail,
@@ -11,13 +11,13 @@ import {
   ArrowRight,
   CheckCircle2,
   ExternalLink,
-  Sparkles
-} from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
+  Sparkles,
+} from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export const Footer: React.FC = () => {
   const { openBrochureModal, openAdvisorModal } = useModal();
-  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterEmail, setNewsletterEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -44,7 +44,8 @@ export const Footer: React.FC = () => {
               </div>
               <div>
                 <span className="text-xl font-extrabold font-display tracking-tight text-white block">
-                  APEX <span className="text-cyan-400">ACADEMY</span>
+                  Care International{" "}
+                  <span className="text-cyan-400">ACADEMY</span>
                 </span>
                 <span className="text-[10px] tracking-widest uppercase font-semibold text-slate-400 block -mt-0.5">
                   UK Professional & Higher Education
@@ -53,13 +54,19 @@ export const Footer: React.FC = () => {
             </Link>
 
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-              Apex Academy of Professional Education is a premier UK training institution offering accredited qualifications in Security (SIA), Construction (CSCS), Health & Social Care, Business Leadership, and International Higher Education Pathways.
+              Care International Academy of Professional Education is a premier
+              UK training institution offering accredited qualifications in
+              Security (SIA), Construction (CSCS), Health & Social Care,
+              Business Leadership, and International Higher Education Pathways.
             </p>
 
             <div className="space-y-2.5 pt-2 text-xs text-slate-300">
               <div className="flex items-start space-x-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                <span>Apex Education Campus, 45 Commercial Road, London E1 1LA, United Kingdom</span>
+                <span>
+                  Care International Education Campus, 45 Commercial Road,
+                  London E1 1LA, United Kingdom
+                </span>
               </div>
               <div className="flex items-center space-x-2.5">
                 <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
@@ -67,7 +74,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center space-x-2.5">
                 <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>admissions@apexacademy.ac.uk</span>
+                <span>admissions@Care International academy.ac.uk</span>
               </div>
               <div className="flex items-center space-x-2.5">
                 <Clock className="w-4 h-4 text-cyan-400 flex-shrink-0" />
@@ -98,42 +105,66 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/courses/security/sia-door-supervisor-course" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/security/sia-door-supervisor-course"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   SIA Door Supervisor
                 </Link>
               </li>
               <li>
-                <Link to="/courses/security/sia-cctv-operator-course" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/security/sia-cctv-operator-course"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   SIA CCTV Operations
                 </Link>
               </li>
               <li>
-                <Link to="/courses/construction/cscs-green-card-course-package" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/construction/cscs-green-card-course-package"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   CSCS Green Card Package
                 </Link>
               </li>
               <li>
-                <Link to="/courses/construction/sssts-site-supervisors-safety-training-scheme" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/construction/sssts-site-supervisors-safety-training-scheme"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   CITB SSSTS Site Safety
                 </Link>
               </li>
               <li>
-                <Link to="/courses/health-social-care/level-3-diploma-adult-care-health-social" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/health-social-care/level-3-diploma-adult-care-health-social"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Level 3 Diploma in Care
                 </Link>
               </li>
               <li>
-                <Link to="/courses/business/level-5-diploma-business-management-leadership" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/business/level-5-diploma-business-management-leadership"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Level 5 Business Leadership
                 </Link>
               </li>
               <li>
-                <Link to="/courses/english/ielts-academic-general-masterclass-band-7-plus" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/english/ielts-academic-general-masterclass-band-7-plus"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   IELTS Band 7.5+ Masterclass
                 </Link>
               </li>
               <li>
-                <Link to="/courses/professional-qualifications/acca-accounting-foundation-applied-knowledge" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/courses/professional-qualifications/acca-accounting-foundation-applied-knowledge"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   ACCA Accounting Course
                 </Link>
               </li>
@@ -147,37 +178,58 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/study-in-uk" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/study-in-uk"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   UK University Pathways
                 </Link>
               </li>
               <li>
-                <Link to="/study-in-uk" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/study-in-uk"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Bachelor Degree Top-Up
                 </Link>
               </li>
               <li>
-                <Link to="/international-students" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/international-students"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Student Route Visa Guidance
                 </Link>
               </li>
               <li>
-                <Link to="/international-students" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/international-students"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   CAS & Document Verification
                 </Link>
               </li>
               <li>
-                <Link to="/international-students" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/international-students"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Country-Specific Guides
                 </Link>
               </li>
               <li>
-                <Link to="/student-support" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/student-support"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   London Accommodation Help
                 </Link>
               </li>
               <li>
-                <Link to="/student-support" className="hover:text-cyan-400 transition-colors">
+                <Link
+                  to="/student-support"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   Graduate Route Post-Study Visa
                 </Link>
               </li>
@@ -190,7 +242,8 @@ export const Footer: React.FC = () => {
               Intake Alerts & Updates
             </h4>
             <p className="text-xs text-slate-400">
-              Subscribe to get notified of upcoming batch dates, discount vouchers, and UK visa policy updates.
+              Subscribe to get notified of upcoming batch dates, discount
+              vouchers, and UK visa policy updates.
             </p>
 
             {subscribed ? (
@@ -224,15 +277,28 @@ export const Footer: React.FC = () => {
                 Academy Resources
               </h5>
               <div className="flex flex-wrap gap-2 text-xs">
-                <Link to="/about" className="text-slate-400 hover:text-white">About</Link>
+                <Link to="/about" className="text-slate-400 hover:text-white">
+                  About
+                </Link>
                 <span>•</span>
-                <Link to="/admissions" className="text-slate-400 hover:text-white">Admissions</Link>
+                <Link
+                  to="/admissions"
+                  className="text-slate-400 hover:text-white"
+                >
+                  Admissions
+                </Link>
                 <span>•</span>
-                <Link to="/blog" className="text-slate-400 hover:text-white">Blog</Link>
+                <Link to="/blog" className="text-slate-400 hover:text-white">
+                  Blog
+                </Link>
                 <span>•</span>
-                <Link to="/faq" className="text-slate-400 hover:text-white">FAQ</Link>
+                <Link to="/faq" className="text-slate-400 hover:text-white">
+                  FAQ
+                </Link>
                 <span>•</span>
-                <Link to="/contact" className="text-slate-400 hover:text-white">Campus Map</Link>
+                <Link to="/contact" className="text-slate-400 hover:text-white">
+                  Campus Map
+                </Link>
               </div>
             </div>
           </div>
@@ -242,26 +308,51 @@ export const Footer: React.FC = () => {
         <div className="py-6 border-t border-b border-slate-900 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-5 h-5 text-indigo-400" />
-            <span className="font-semibold text-slate-200">Accredited & Regulated Qualifications:</span>
+            <span className="font-semibold text-slate-200">
+              Accredited & Regulated Qualifications:
+            </span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-slate-400 font-medium">
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Ofqual Regulated</span>
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">SIA Licenced Training</span>
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Highfield Approved</span>
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">CITB Site Safety</span>
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">CPD Certified</span>
-            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">British Council Agent</span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              Ofqual Regulated
+            </span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              SIA Licenced Training
+            </span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              Highfield Approved
+            </span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              CITB Site Safety
+            </span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              CPD Certified
+            </span>
+            <span className="bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
+              British Council Agent
+            </span>
           </div>
         </div>
 
         {/* Bottom Legal & Copyright Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} Apex Academy of Professional Education. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Care International Academy of
+            Professional Education. All rights reserved.
+          </p>
           <div className="flex items-center space-x-6">
-            <Link to="/faq" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
-            <Link to="/faq" className="hover:text-slate-400 transition-colors">Terms & Conditions</Link>
-            <Link to="/faq" className="hover:text-slate-400 transition-colors">Cookie Policy</Link>
-            <Link to="/faq" className="hover:text-slate-400 transition-colors">Accessibility</Link>
+            <Link to="/faq" className="hover:text-slate-400 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/faq" className="hover:text-slate-400 transition-colors">
+              Terms & Conditions
+            </Link>
+            <Link to="/faq" className="hover:text-slate-400 transition-colors">
+              Cookie Policy
+            </Link>
+            <Link to="/faq" className="hover:text-slate-400 transition-colors">
+              Accessibility
+            </Link>
           </div>
         </div>
       </div>

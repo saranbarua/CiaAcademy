@@ -1,34 +1,44 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Search, FileCheck, BookOpenCheck, Award, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import {
+  Search,
+  FileCheck,
+  BookOpenCheck,
+  Award,
+  ArrowRight,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const HowItWorks: React.FC = () => {
   const steps = [
     {
-      number: '01',
-      title: 'Choose Course or Pathway',
-      description: 'Explore our accredited qualifications in SIA, CSCS, Care, or select a Bachelor/Master top-up route.',
-      icon: Search
+      number: "01",
+      title: "Choose Course or Pathway",
+      description:
+        "Explore our accredited qualifications in SIA, CSCS, Care, or select a Bachelor/Master top-up route.",
+      icon: Search,
     },
     {
-      number: '02',
-      title: 'Submit Online Application',
-      description: 'Fill out our quick 2-minute registration form with instant ID verification and flexible payment plan setup.',
-      icon: FileCheck
+      number: "02",
+      title: "Submit Online Application",
+      description:
+        "Fill out our quick 2-minute registration form with instant ID verification and flexible payment plan setup.",
+      icon: FileCheck,
     },
     {
-      number: '03',
-      title: 'Attend Classroom or Online',
-      description: 'Train with expert tutors at our London campus or access modern digital study materials and mock exam banks.',
-      icon: BookOpenCheck
+      number: "03",
+      title: "Attend Classroom or Online",
+      description:
+        "Train with expert tutors at our London campus or access modern digital study materials and mock exam banks.",
+      icon: BookOpenCheck,
     },
     {
-      number: '04',
-      title: 'Get Certified & Employed',
-      description: 'Receive your Ofqual regulated diploma, licence portal upload, and one-on-one job referral support.',
-      icon: Award
-    }
+      number: "04",
+      title: "Get Certified & Employed",
+      description:
+        "Receive your Ofqual regulated diploma, licence portal upload, and one-on-one job referral support.",
+      icon: Award,
+    },
   ];
 
   return (
@@ -39,10 +49,11 @@ export const HowItWorks: React.FC = () => {
             Simple 4-Step Process
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white">
-            How to Get Started at Apex Academy
+            How to Get Started at Care International Academy
           </h2>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2">
-            From initial registration to regulated certificate dispatch, we make every step seamless.
+            From initial registration to regulated certificate dispatch, we make
+            every step seamless.
           </p>
         </div>
 

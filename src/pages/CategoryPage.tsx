@@ -122,12 +122,12 @@ export const CategoryPage: React.FC = () => {
       <SEOHead
         title={
           category
-            ? `${category.name} Qualifications & Courses London | Apex Academy`
-            : "Course Category | Apex Academy"
+            ? `${category.name} Qualifications & Courses London | Care International  Academy`
+            : "Course Category | Care International  Academy"
         }
         description={category?.description || "Browse accredited courses."}
         keywords={`${category?.name || ""} courses London, Ofqual accredited ${category?.name || ""}`}
-        canonicalUrl={`https://apexacademy.ac.uk/courses/${categorySlug}`}
+        canonicalUrl={`https://Care International academy.ac.uk/courses/${categorySlug}`}
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">

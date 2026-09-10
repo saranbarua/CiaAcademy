@@ -175,10 +175,10 @@ export const CoursesPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Accredited Courses & Qualifications Directory | Apex Academy"
+        title="Accredited Courses & Qualifications Directory | Care International  Academy"
         description="Browse all UK accredited qualifications in SIA Security, CITB Construction, Adult Care, Business Management, and University Top-Up Pathways."
         keywords="UK courses directory, SIA security courses London, CSCS card training, NVQ Health and Social Care, Ofqual diplomas"
-        canonicalUrl="https://apexacademy.ac.uk/courses"
+        canonicalUrl="https://Care International academy.ac.uk/courses"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">

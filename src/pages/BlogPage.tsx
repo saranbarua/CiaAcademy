@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   Calendar,
   Clock,
@@ -8,23 +8,33 @@ import {
   Search,
   ArrowRight,
   BookOpen,
-  Tag
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { blogsData } from '../data/blogsData';
+  Tag,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { blogsData } from "../data/blogsData";
 
 export const BlogPage: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const categories = ['All', 'Security Careers', 'Study in UK', 'Construction', 'Healthcare', 'Study Skills'];
+  const categories = [
+    "All",
+    "Security Careers",
+    "Study in UK",
+    "Construction",
+    "Healthcare",
+    "Study Skills",
+  ];
 
   const filteredBlogs = blogsData.filter((b) => {
-    if (selectedCategory !== 'All' && b.category !== selectedCategory) return false;
+    if (selectedCategory !== "All" && b.category !== selectedCategory)
+      return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      return b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q);
+      return (
+        b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q)
+      );
     }
     return true;
   });
@@ -32,14 +42,14 @@ export const BlogPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Apex Academy Blog | UK Education Guides, Licencing News & Visa Insights"
+        title="Care International  Academy Blog | UK Education Guides, Licencing News & Visa Insights"
         description="Read the latest articles on SIA licences, CSCS card requirements, UK university degree top-up pathways, and student visa updates."
-        keywords="Apex Academy blog, SIA licence guide 2026, CSCS card steps, UK student visa news, healthcare NVQ salary UK"
-        canonicalUrl="https://apexacademy.ac.uk/blog"
+        keywords="Care International  Academy blog, SIA licence guide 2026, CSCS card steps, UK student visa news, healthcare NVQ salary UK"
+        canonicalUrl="https://Care International academy.ac.uk/blog"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Blog & UK Education Guides' }]} />
+        <Breadcrumbs items={[{ label: "Blog & UK Education Guides" }]} />
 
         {/* Hero */}
         <section className="py-12 bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -52,7 +62,8 @@ export const BlogPage: React.FC = () => {
                 UK Education, Career & Visa Guides
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Authoritative insights written by our accredited faculty and UK immigration consultants.
+                Authoritative insights written by our accredited faculty and UK
+                immigration consultants.
               </p>
             </div>
           </div>
@@ -79,8 +90,8 @@ export const BlogPage: React.FC = () => {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                     selectedCategory === cat
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+                      ? "bg-indigo-600 text-white shadow-sm"
+                      : "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200"
                   }`}
                 >
                   {cat}
@@ -112,7 +123,11 @@ export const BlogPage: React.FC = () => {
                     <div className="flex items-center space-x-3 text-xs text-slate-400 mb-2">
                       <span className="flex items-center">
                         <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {new Date(blog.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {new Date(blog.date).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
                       </span>
                       <span>•</span>
                       <span className="flex items-center">
@@ -122,9 +137,7 @@ export const BlogPage: React.FC = () => {
                     </div>
 
                     <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
-                      <Link to={`/blog/${blog.slug}`}>
-                        {blog.title}
-                      </Link>
+                      <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
                     </h3>
 
                     <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">

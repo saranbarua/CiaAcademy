@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Home, Search, BookOpen, ArrowRight } from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Home, Search, BookOpen, ArrowRight } from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
 
 export const NotFoundPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="404 Page Not Found | Apex Academy"
+        title="404 Page Not Found | Care International  Academy"
         description="The page you are looking for does not exist or has been relocated."
-        canonicalUrl="https://apexacademy.ac.uk/404"
+        canonicalUrl="https://Care International academy.ac.uk/404"
       />
 
       <div className="min-h-[70vh] flex items-center justify-center bg-slate-50 dark:bg-[#0B0F19] px-4 py-16">
@@ -23,7 +23,8 @@ export const NotFoundPage: React.FC = () => {
               Page Not Found
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              The link you clicked may be broken, or the page may have been updated in our latest syllabus catalog.
+              The link you clicked may be broken, or the page may have been
+              updated in our latest syllabus catalog.
             </p>
           </div>
 

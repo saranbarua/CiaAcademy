@@ -1,7 +1,7 @@
-import React from 'react';
-import { Phone, Mail, Clock, Sparkles, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useModal } from '../../context/ModalContext';
+import React from "react";
+import { Phone, Mail, Clock, Sparkles, HelpCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useModal } from "../../context/ModalContext";
 
 export const TopBar: React.FC = () => {
   const { openAdvisorModal } = useModal();
@@ -16,7 +16,8 @@ export const TopBar: React.FC = () => {
             Admissions Open
           </span>
           <span className="text-slate-200 font-medium truncate max-w-md lg:max-w-xl">
-            Admissions Open for Winter & Spring Intakes — UK Accredited SIA, CSCS, Care & Degree Pathways
+            Admissions Open for Winter & Spring Intakes — UK Accredited SIA,
+            CSCS, Care & Degree Pathways
           </span>
         </div>
 
@@ -31,11 +32,11 @@ export const TopBar: React.FC = () => {
           </a>
 
           <a
-            href="mailto:admissions@apexacademy.ac.uk"
+            href="mailto:admissions@Care International academy.ac.uk"
             className="hidden md:flex items-center text-slate-300 hover:text-white transition-colors"
           >
             <Mail className="w-3.5 h-3.5 mr-1.5 text-indigo-400" />
-            <span>admissions@apexacademy.ac.uk</span>
+            <span>admissions@Care International academy.ac.uk</span>
           </a>
 
           <button

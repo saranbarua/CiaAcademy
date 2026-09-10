@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Play } from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
+import React, { useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, Play } from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export const VideoModal: React.FC = () => {
   const { isVideoModalOpen, closeVideoModal, videoUrl } = useModal();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeVideoModal();
+      if (e.key === "Escape") closeVideoModal();
     };
     if (isVideoModalOpen) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
     }
     return () => {
-      document.body.style.overflow = 'unset';
-      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isVideoModalOpen, closeVideoModal]);
 
@@ -39,7 +39,7 @@ export const VideoModal: React.FC = () => {
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="relative w-full max-w-4xl bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-800 z-10"
             role="dialog"
             aria-modal="true"
@@ -49,7 +49,9 @@ export const VideoModal: React.FC = () => {
             <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900/90 border-b border-slate-800">
               <div className="flex items-center space-x-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-sm font-medium text-slate-200">Apex Academy Campus & Training Tour</span>
+                <span className="text-sm font-medium text-slate-200">
+                  Care International Academy Campus & Training Tour
+                </span>
               </div>
               <button
                 id="close-video-modal-btn"
@@ -63,7 +65,9 @@ export const VideoModal: React.FC = () => {
 
             {/* Video Player Frame */}
             <div className="relative aspect-video w-full bg-black">
-              {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') || videoUrl.includes('vimeo.com') ? (
+              {videoUrl.includes("youtube.com") ||
+              videoUrl.includes("youtu.be") ||
+              videoUrl.includes("vimeo.com") ? (
                 <iframe
                   src={videoUrl}
                   title="Academy Video"
@@ -76,9 +80,13 @@ export const VideoModal: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-indigo-600/30 border border-indigo-500 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/20">
                     <Play className="w-8 h-8 text-cyan-400 ml-1" />
                   </div>
-                  <h3 className="text-xl font-bold font-display mb-2">Welcome to Apex Academy UK</h3>
+                  <h3 className="text-xl font-bold font-display mb-2">
+                    Welcome to Care International Academy UK
+                  </h3>
                   <p className="text-sm text-slate-300 max-w-md">
-                    Explore our modern training suites in London & Birmingham, interactive SIA physical intervention labs, and international higher education pathways.
+                    Explore our modern training suites in London & Birmingham,
+                    interactive SIA physical intervention labs, and
+                    international higher education pathways.
                   </p>
                 </div>
               )}
@@ -87,7 +95,9 @@ export const VideoModal: React.FC = () => {
             {/* Footer information */}
             <div className="px-5 py-3 bg-slate-950 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
               <span>Accredited by Highfield, Pearson, SIA & CITB</span>
-              <span className="text-indigo-400 font-medium">Admissions Hotline: +44 (0) 20 8123 4567</span>
+              <span className="text-indigo-400 font-medium">
+                Admissions Hotline: +44 (0) 20 8123 4567
+              </span>
             </div>
           </motion.div>
         </div>

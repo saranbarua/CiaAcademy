@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   GraduationCap,
   Building,
@@ -14,46 +14,49 @@ import {
   Sparkles,
   Calculator,
   Download,
-  PhoneCall
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { useModal } from '../context/ModalContext';
-import { CTASection } from '../components/home/CTASection';
+  PhoneCall,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useModal } from "../context/ModalContext";
+import { CTASection } from "../components/home/CTASection";
 
 export const StudyInUkPage: React.FC = () => {
   const { openBrochureModal, openAdvisorModal } = useModal();
 
-  const [selectedPathway, setSelectedPathway] = useState<'topup' | 'foundation' | 'master'>('topup');
+  const [selectedPathway, setSelectedPathway] = useState<
+    "topup" | "foundation" | "master"
+  >("topup");
 
   const comparisonData = [
     {
-      metric: 'Standard 3-Year UK University Route',
-      cost: '£45,000 - £60,000 Total Tuition',
-      duration: '3 Years Full-Time',
-      qualification: 'BSc / BA (Hons)',
-      structure: 'Year 1 + Year 2 + Year 3 at University Campus'
+      metric: "Standard 3-Year UK University Route",
+      cost: "£45,000 - £60,000 Total Tuition",
+      duration: "3 Years Full-Time",
+      qualification: "BSc / BA (Hons)",
+      structure: "Year 1 + Year 2 + Year 3 at University Campus",
     },
     {
-      metric: 'Apex Academy Fast-Track Top-Up Route',
-      cost: '£14,500 - £18,000 Total Tuition (Save over £25,000)',
-      duration: '2 Years Total (Fast-Tracked)',
-      qualification: 'BSc / BA (Hons) from Partner UK University',
-      structure: 'Year 1 & 2 at Apex Academy (240 Ofqual Credits) + Final Year 3 at University'
-    }
+      metric: "Care International  Academy Fast-Track Top-Up Route",
+      cost: "£14,500 - £18,000 Total Tuition (Save over £25,000)",
+      duration: "2 Years Total (Fast-Tracked)",
+      qualification: "BSc / BA (Hons) from Partner UK University",
+      structure:
+        "Year 1 & 2 at Care International  Academy (240 Ofqual Credits) + Final Year 3 at University",
+    },
   ];
 
   return (
     <>
       <SEOHead
-        title="Study in the UK | Fast-Track Degree Top-Up & University Pathways | Apex Academy"
-        description="Earn an accredited British Bachelor or Master Degree through Apex Academy's Level 4 & 5 Extended Diplomas and direct UK University Top-Up partnerships."
+        title="Study in the UK | Fast-Track Degree Top-Up & University Pathways | Care International  Academy"
+        description="Earn an accredited British Bachelor or Master Degree through Care International  Academy's Level 4 & 5 Extended Diplomas and direct UK University Top-Up partnerships."
         keywords="study in UK, top up degree UK, bachelor degree fast track London, Level 5 diploma university progression, UK university pathways"
-        canonicalUrl="https://apexacademy.ac.uk/study-in-uk"
+        canonicalUrl="https://Care International academy.ac.uk/study-in-uk"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Study in the UK' }]} />
+        <Breadcrumbs items={[{ label: "Study in the UK" }]} />
 
         {/* Hero Section */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -67,7 +70,10 @@ export const StudyInUkPage: React.FC = () => {
                 Your Direct Route to a British University Degree
               </h1>
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                Save up to 40% on standard UK university tuition while studying in Central London. Progress seamlessly from Level 4/5 Ofqual diplomas directly into the final year of a UK Bachelor's Honours degree.
+                Save up to 40% on standard UK university tuition while studying
+                in Central London. Progress seamlessly from Level 4/5 Ofqual
+                diplomas directly into the final year of a UK Bachelor's Honours
+                degree.
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
@@ -77,7 +83,7 @@ export const StudyInUkPage: React.FC = () => {
                   Apply for Degree Pathway
                 </Link>
                 <button
-                  onClick={() => openAdvisorModal('Study in UK Pathway')}
+                  onClick={() => openAdvisorModal("Study in UK Pathway")}
                   className="px-6 py-3.5 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors flex items-center gap-2"
                 >
                   <PhoneCall className="w-4 h-4 text-cyan-400" />
@@ -113,16 +119,19 @@ export const StudyInUkPage: React.FC = () => {
                   £45,000 – £60,000
                 </p>
                 <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 pt-2">
-                  <li>• Pay full high international university fees for all 3 years</li>
+                  <li>
+                    • Pay full high international university fees for all 3
+                    years
+                  </li>
                   <li>• High entry IELTS hurdles (typically 6.5 minimum)</li>
                   <li>• Massive lecture halls with 200+ students</li>
                 </ul>
               </div>
 
-              {/* Apex Fast-Track */}
+              {/* Care International  Fast-Track */}
               <div className="p-8 rounded-3xl bg-gradient-to-br from-indigo-900 to-violet-950 text-white border-2 border-indigo-500 shadow-2xl space-y-4 relative">
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-cyan-400 text-slate-950 inline-block">
-                  Recommended Apex Route
+                  Recommended Care International Route
                 </span>
                 <h3 className="text-2xl font-bold text-white font-display">
                   Level 4/5 Diploma + 1-Year Top-Up
@@ -134,11 +143,20 @@ export const StudyInUkPage: React.FC = () => {
                   ✓ Save up to £25,000+ in tuition fees
                 </p>
                 <ul className="space-y-2 text-xs sm:text-sm text-slate-200 pt-2">
-                  <li>• Complete Years 1 & 2 at Apex Academy (240 Ofqual Credits)</li>
-                  <li>• Direct entry into final Year 3 (Top-Up) at top UK Universities</li>
+                  <li>
+                    • Complete Years 1 & 2 at Care International Academy (240
+                    Ofqual Credits)
+                  </li>
+                  <li>
+                    • Direct entry into final Year 3 (Top-Up) at top UK
+                    Universities
+                  </li>
                   <li>• Small class sizes with personalized 1-on-1 tutoring</li>
                   <li>• Graduate with the exact same BA/BSc (Hons) degree</li>
-                  <li>• Full 2-Year Graduate Route Post-Study Work Visa eligibility</li>
+                  <li>
+                    • Full 2-Year Graduate Route Post-Study Work Visa
+                    eligibility
+                  </li>
                 </ul>
               </div>
             </div>
@@ -163,9 +181,13 @@ export const StudyInUkPage: React.FC = () => {
                   Business & Management
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 4 & 5 Extended Diploma in Business leading to BA (Hons) in Business Management, Marketing, or Finance.
+                  Level 4 & 5 Extended Diploma in Business leading to BA (Hons)
+                  in Business Management, Marketing, or Finance.
                 </p>
-                <Link to="/courses/business" className="inline-flex items-center text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline gap-1 pt-2">
+                <Link
+                  to="/courses/business"
+                  className="inline-flex items-center text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline gap-1 pt-2"
+                >
                   <span>View Syllabus</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
@@ -179,9 +201,13 @@ export const StudyInUkPage: React.FC = () => {
                   Health & Social Care Leadership
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 4 & 5 Diploma in Adult Care leading to BSc (Hons) in Health & Social Care Services Management.
+                  Level 4 & 5 Diploma in Adult Care leading to BSc (Hons) in
+                  Health & Social Care Services Management.
                 </p>
-                <Link to="/courses/health-social-care" className="inline-flex items-center text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline gap-1 pt-2">
+                <Link
+                  to="/courses/health-social-care"
+                  className="inline-flex items-center text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline gap-1 pt-2"
+                >
                   <span>View Syllabus</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
@@ -195,9 +221,13 @@ export const StudyInUkPage: React.FC = () => {
                   Postgraduate / MBA Top-Up
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 7 Post-Graduate Diploma leading directly to MBA dissertation stage (6 months) at UK universities.
+                  Level 7 Post-Graduate Diploma leading directly to MBA
+                  dissertation stage (6 months) at UK universities.
                 </p>
-                <Link to="/courses/business" className="inline-flex items-center text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline gap-1 pt-2">
+                <Link
+                  to="/courses/business"
+                  className="inline-flex items-center text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline gap-1 pt-2"
+                >
                   <span>View Syllabus</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>

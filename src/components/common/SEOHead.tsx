@@ -1,5 +1,5 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
 
 interface SEOHeadProps {
   title?: string;
@@ -11,15 +11,20 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Apex Academy | UK Accredited Professional Education & Training',
-  description = 'Leading UK academy for accredited professional qualifications in Security (SIA), Construction (CSCS), Health & Social Care, Business Diplomas, and International University Pathways.',
+  title = "Care International  Academy | UK Accredited Professional Education & Training",
+  description = "Leading UK academy for accredited professional qualifications in Security (SIA), Construction (CSCS), Health & Social Care, Business Diplomas, and International University Pathways.",
   canonical,
-  ogType = 'website',
-  ogImage = 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80',
-  structuredData
+  ogType = "website",
+  ogImage = "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80",
+  structuredData,
 }) => {
-  const siteTitle = title.includes('Apex Academy') ? title : `${title} | Apex Academy UK`;
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://apexacademy.ac.uk';
+  const siteTitle = title.includes("Care International  Academy")
+    ? title
+    : `${title} | Care International  Academy UK`;
+  const currentUrl =
+    typeof window !== "undefined"
+      ? window.location.href
+      : "https://Care International academy.ac.uk";
 
   return (
     <Helmet>
@@ -35,7 +40,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:title" content={siteTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:site_name" content="Apex Academy UK" />
+      <meta property="og:site_name" content="Care International  Academy UK" />
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />

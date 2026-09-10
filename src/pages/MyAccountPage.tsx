@@ -147,9 +147,9 @@ export const MyAccountPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="My Account | Apex Academy"
-        description="Manage your Apex Academy profile, view your bookings, and track your course progress."
-        canonicalUrl="https://apexacademy.ac.uk/my-account"
+        title="My Account | Care International  Academy"
+        description="Manage your Care International  Academy profile, view your bookings, and track your course progress."
+        canonicalUrl="https://Care International academy.ac.uk/my-account"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">

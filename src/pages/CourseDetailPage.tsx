@@ -137,8 +137,8 @@ export const CourseDetailPage: React.FC = () => {
     description: course.shortDescription,
     provider: {
       "@type": "Organization",
-      name: "Apex Academy of Professional Education",
-      sameAs: "https://apexacademy.ac.uk",
+      name: "Care International  Academy of Professional Education",
+      sameAs: "https://Care International academy.ac.uk",
     },
     offers: {
       "@type": "Offer",
@@ -152,10 +152,10 @@ export const CourseDetailPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title={`${course.title} | UK Regulated Qualification | Apex Academy`}
+        title={`${course.title} | UK Regulated Qualification | Care International  Academy`}
         description={course.shortDescription}
         keywords={`${course.title}, ${categoryName}, SIA licence London, Ofqual qualifications`}
-        canonicalUrl={`https://apexacademy.ac.uk/courses/${categorySlug}/${course.slug}`}
+        canonicalUrl={`https://Care International academy.ac.uk/courses/${categorySlug}/${course.slug}`}
         schemaJson={courseSchema}
       />
 

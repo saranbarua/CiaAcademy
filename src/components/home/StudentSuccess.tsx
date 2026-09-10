@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2, Award } from 'lucide-react';
-import { testimonialsData } from '../../data/testimonialsData';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Star,
+  Quote,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  Award,
+} from "lucide-react";
+import { testimonialsData } from "../../data/testimonialsData";
 
 export const StudentSuccess: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -11,7 +18,9 @@ export const StudentSuccess: React.FC = () => {
   };
 
   const handlePrev = () => {
-    setActiveIdx((prev) => (prev === 0 ? testimonialsData.length - 1 : prev - 1));
+    setActiveIdx((prev) =>
+      prev === 0 ? testimonialsData.length - 1 : prev - 1,
+    );
   };
 
   const current = testimonialsData[activeIdx];
@@ -30,7 +39,8 @@ export const StudentSuccess: React.FC = () => {
               Student Stories & Verified Career Outcomes
             </h2>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2">
-              Hear from graduates who secured licencing, promotions, and UK university degrees through Apex Academy.
+              Hear from graduates who secured licencing, promotions, and UK
+              university degrees through Care International Academy.
             </p>
           </div>
 
@@ -121,8 +131,8 @@ export const StudentSuccess: React.FC = () => {
                   onClick={() => setActiveIdx(index)}
                   className={`w-full p-3 rounded-2xl text-left flex items-center space-x-3 transition-all ${
                     index === activeIdx
-                      ? 'bg-indigo-600 text-white shadow-md'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750'
+                      ? "bg-indigo-600 text-white shadow-md"
+                      : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750"
                   }`}
                 >
                   <img
@@ -134,7 +144,9 @@ export const StudentSuccess: React.FC = () => {
                     <p className="text-xs font-bold truncate">
                       {item.name} {item.flag}
                     </p>
-                    <p className={`text-[11px] truncate ${index === activeIdx ? 'text-indigo-100' : 'text-slate-400'}`}>
+                    <p
+                      className={`text-[11px] truncate ${index === activeIdx ? "text-indigo-100" : "text-slate-400"}`}
+                    >
                       {item.course}
                     </p>
                   </div>

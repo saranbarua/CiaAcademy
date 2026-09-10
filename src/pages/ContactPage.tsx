@@ -130,10 +130,10 @@ export const ContactPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Contact Us & Campus Location | Apex Academy London"
-        description="Visit Apex Academy at 45 Commercial Road, London E1 1LA. Contact our admissions desk via telephone, email, or our online inquiry form."
-        keywords="Apex Academy contact, London training centre address, Aldgate East education campus, course advisor helpline"
-        canonicalUrl="https://apexacademy.ac.uk/contact"
+        title="Contact Us & Campus Location | Care International  Academy London"
+        description="Visit Care International  Academy at 45 Commercial Road, London E1 1LA. Contact our admissions desk via telephone, email, or our online inquiry form."
+        keywords="Care International  Academy contact, London training centre address, Aldgate East education campus, course advisor helpline"
+        canonicalUrl="https://Care International academy.ac.uk/contact"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
@@ -147,7 +147,7 @@ export const ContactPage: React.FC = () => {
                 Central London Campus
               </span>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-white">
-                Get in Touch with Apex Academy
+                Get in Touch with Care International Academy
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
                 Have questions about our qualifications, batch timetables, or
@@ -174,8 +174,8 @@ export const ContactPage: React.FC = () => {
                         Campus Address:
                       </strong>
                       <span>
-                        Apex Education Campus, 45 Commercial Road, London E1
-                        1LA, United Kingdom
+                        Care International Education Campus, 45 Commercial Road,
+                        London E1 1LA, United Kingdom
                       </span>
                     </div>
                   </div>
@@ -201,9 +201,9 @@ export const ContactPage: React.FC = () => {
                         Email Inquiries:
                       </strong>
                       <span>
-                        admissions@apexacademy.ac.uk
+                        admissions@Care International academy.ac.uk
                         <br />
-                        info@apexacademy.ac.uk
+                        info@Care International academy.ac.uk
                       </span>
                     </div>
                   </div>
@@ -260,8 +260,9 @@ export const ContactPage: React.FC = () => {
                       Message Dispatched Successfully!
                     </h4>
                     <p className="text-xs text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
-                      Thank you for contacting Apex Academy. An advisor has been
-                      assigned to your query and will reach out shortly.
+                      Thank you for contacting Care International Academy. An
+                      advisor has been assigned to your query and will reach out
+                      shortly.
                     </p>
                     <button
                       onClick={resetForm}

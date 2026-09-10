@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Download, FileText, CheckCircle2, Mail, User, Phone } from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
-import confetti from 'canvas-confetti';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  X,
+  Download,
+  FileText,
+  CheckCircle2,
+  Mail,
+  User,
+  Phone,
+} from "lucide-react";
+import { useModal } from "../../context/ModalContext";
+import confetti from "canvas-confetti";
 
 export const BrochureModal: React.FC = () => {
-  const { isBrochureModalOpen, closeBrochureModal, brochureCourseName } = useModal();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const { isBrochureModalOpen, closeBrochureModal, brochureCourseName } =
+    useModal();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [downloaded, setDownloaded] = useState(false);
 
   const handleDownload = (e: React.FormEvent) => {
@@ -17,17 +26,20 @@ export const BrochureModal: React.FC = () => {
     confetti({
       particleCount: 60,
       spread: 60,
-      origin: { y: 0.7 }
+      origin: { y: 0.7 },
     });
 
     // Simulate instant download trigger
     setTimeout(() => {
-      const element = document.createElement('a');
-      const file = new Blob([
-        `APEX ACADEMY UK - OFFICIAL COURSE PROSPECTUS & SYLLABUS\n\nCourse: ${brochureCourseName || 'General Academy Prospectus 2026'}\nAccreditation: Highfield / Pearson / SIA / Ofqual\nTuition & Funding: Flexible 0% Interest Plans Available\nCampus Locations: Central London, Birmingham & Virtual Learning\nAdmissions Helpline: +44 (0) 20 8123 4567\nWebsite: https://apexacademy.ac.uk`
-      ], { type: 'text/plain' });
+      const element = document.createElement("a");
+      const file = new Blob(
+        [
+          `Care International  ACADEMY UK - OFFICIAL COURSE PROSPECTUS & SYLLABUS\n\nCourse: ${brochureCourseName || "General Academy Prospectus 2026"}\nAccreditation: Highfield / Pearson / SIA / Ofqual\nTuition & Funding: Flexible 0% Interest Plans Available\nCampus Locations: Central London, Birmingham & Virtual Learning\nAdmissions Helpline: +44 (0) 20 8123 4567\nWebsite: https://Care International academy.ac.uk`,
+        ],
+        { type: "text/plain" },
+      );
       element.href = URL.createObjectURL(file);
-      element.download = `${(brochureCourseName || 'Apex_Academy_Prospectus').replace(/\s+/g, '_')}_Syllabus.txt`;
+      element.download = `${(brochureCourseName || "Care International _Academy_Prospectus").replace(/\s+/g, "_")}_Syllabus.txt`;
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
@@ -70,9 +82,13 @@ export const BrochureModal: React.FC = () => {
               <div className="w-10 h-10 rounded-2xl bg-violet-600/30 border border-violet-400/30 flex items-center justify-center mb-2">
                 <FileText className="w-5 h-5 text-violet-300" />
               </div>
-              <h3 className="text-lg font-bold font-display">Download Course Prospectus</h3>
+              <h3 className="text-lg font-bold font-display">
+                Download Course Prospectus
+              </h3>
               <p className="text-xs text-slate-300 mt-0.5">
-                {brochureCourseName ? `Full syllabus & module breakdown for: ${brochureCourseName}` : 'Download the complete 2026 Course Directory and Fee Schedule.'}
+                {brochureCourseName
+                  ? `Full syllabus & module breakdown for: ${brochureCourseName}`
+                  : "Download the complete 2026 Course Directory and Fee Schedule."}
               </p>
             </div>
 
@@ -85,7 +101,11 @@ export const BrochureModal: React.FC = () => {
                   Download Started!
                 </h4>
                 <p className="text-xs text-slate-600 dark:text-slate-300">
-                  A digital copy of the syllabus has been sent to <span className="font-semibold text-slate-900 dark:text-white">{email}</span> and downloaded to your device.
+                  A digital copy of the syllabus has been sent to{" "}
+                  <span className="font-semibold text-slate-900 dark:text-white">
+                    {email}
+                  </span>{" "}
+                  and downloaded to your device.
                 </p>
                 <button
                   onClick={handleClose}

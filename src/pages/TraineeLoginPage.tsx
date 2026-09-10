@@ -35,9 +35,9 @@ export const TraineeLoginPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Student Login | Apex Academy"
-        description="Log in to your Apex Academy student account to manage bookings, view certificates, and update your profile."
-        canonicalUrl="https://apexacademy.ac.uk/login"
+        title="Student Login | Care International  Academy"
+        description="Log in to your Care International  Academy student account to manage bookings, view certificates, and update your profile."
+        canonicalUrl="https://Care International academy.ac.uk/login"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen">

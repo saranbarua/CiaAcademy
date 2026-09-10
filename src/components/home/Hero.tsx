@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Play,
@@ -11,9 +11,9 @@ import {
   ShieldCheck,
   Sparkles,
   PhoneCall,
-  MapPin
-} from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
+  MapPin,
+} from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export const Hero: React.FC = () => {
   const { openVideoModal, openAdvisorModal } = useModal();
@@ -24,9 +24,9 @@ export const Hero: React.FC = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.12,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -34,8 +34,8 @@ export const Hero: React.FC = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
-    }
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
   };
 
   const floatingCardVariants = {
@@ -45,9 +45,9 @@ export const Hero: React.FC = () => {
       transition: {
         duration: 4.5 + Math.abs(custom) * 0.2,
         repeat: Infinity,
-        ease: 'easeInOut'
-      }
-    })
+        ease: "easeInOut",
+      },
+    }),
   };
 
   return (
@@ -70,9 +70,15 @@ export const Hero: React.FC = () => {
           {/* Left Column: Hero Content */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             {/* 1. Badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center">
+            <motion.div
+              variants={itemVariants}
+              className="inline-flex items-center"
+            >
               <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-50/90 dark:bg-indigo-950/80 border border-indigo-200/60 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 animate-spin" style={{ animationDuration: '8s' }} />
+                <Sparkles
+                  className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400 animate-spin"
+                  style={{ animationDuration: "8s" }}
+                />
                 <span>UK OFQUAL & SIA REGULATED QUALIFICATIONS</span>
               </div>
             </motion.div>
@@ -82,7 +88,7 @@ export const Hero: React.FC = () => {
               variants={itemVariants}
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white leading-[1.12]"
             >
-              Build Your Future With{' '}
+              Build Your Future With{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-800 dark:from-indigo-400 dark:via-violet-400 dark:to-cyan-400">
                 Professional Education
               </span>
@@ -93,7 +99,12 @@ export const Hero: React.FC = () => {
               variants={itemVariants}
               className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
             >
-              Fast-track your career with industry-recognized certifications in <strong>Security (SIA)</strong>, <strong>Construction (CSCS)</strong>, <strong>Health & Social Care</strong>, <strong>Business Leadership</strong>, and international <strong>UK University Pathways</strong>.
+              Fast-track your career with industry-recognized certifications in{" "}
+              <strong>Security (SIA)</strong>,{" "}
+              <strong>Construction (CSCS)</strong>,{" "}
+              <strong>Health & Social Care</strong>,{" "}
+              <strong>Business Leadership</strong>, and international{" "}
+              <strong>UK University Pathways</strong>.
             </motion.p>
 
             {/* 4. Action CTAs */}
@@ -136,14 +147,18 @@ export const Hero: React.FC = () => {
                 <div className="flex items-center text-slate-900 dark:text-white font-extrabold text-xl sm:text-2xl font-display">
                   <span>96.4%</span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">First-Time Pass Rate</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  First-Time Pass Rate
+                </p>
               </div>
 
               <div>
                 <div className="flex items-center text-slate-900 dark:text-white font-extrabold text-xl sm:text-2xl font-display">
                   <span>5,000+</span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Graduates Certified</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Graduates Certified
+                </p>
               </div>
 
               <div>
@@ -151,7 +166,9 @@ export const Hero: React.FC = () => {
                   <span>4.9/5</span>
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400 ml-1 inline" />
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Student Reviews</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Student Reviews
+                </p>
               </div>
             </motion.div>
           </div>
@@ -166,7 +183,7 @@ export const Hero: React.FC = () => {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40 aspect-[4/5] sm:aspect-[4/4.5] group backdrop-blur-xl">
                 <img
                   src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80"
-                  alt="Apex Academy Students in London"
+                  alt="Care International  Academy Students in London"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
 
@@ -178,9 +195,13 @@ export const Hero: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                      <span className="text-xs font-bold text-slate-900 dark:text-white">Central London Campus</span>
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        Central London Campus
+                      </span>
                     </div>
-                    <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">Weekly Intakes</span>
+                    <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold">
+                      Weekly Intakes
+                    </span>
                   </div>
                   <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 flex items-center">
                     <MapPin className="w-3.5 h-3.5 mr-1 text-indigo-500 flex-shrink-0" />
@@ -214,8 +235,12 @@ export const Hero: React.FC = () => {
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white">5,000+ Students</p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Certified & Placed</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">
+                    5,000+ Students
+                  </p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                    Certified & Placed
+                  </p>
                 </div>
               </motion.div>
 
@@ -231,8 +256,12 @@ export const Hero: React.FC = () => {
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white">UK Recognised</p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Ofqual & SIA Standards</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">
+                    UK Recognised
+                  </p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                    Ofqual & SIA Standards
+                  </p>
                 </div>
               </motion.div>
 
@@ -248,8 +277,12 @@ export const Hero: React.FC = () => {
                   <Star className="w-4 h-4 fill-amber-400" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">4.9 / 5.0</span>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Verified Reviews</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">
+                    4.9 / 5.0
+                  </span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
+                    Verified Reviews
+                  </span>
                 </div>
               </motion.div>
             </motion.div>

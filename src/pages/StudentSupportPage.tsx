@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   HeartHandshake,
   Briefcase,
@@ -11,60 +11,60 @@ import {
   ShieldCheck,
   CheckCircle2,
   ArrowRight,
-  PhoneCall
-} from 'lucide-react';
-import { SEOHead } from '../components/common/SEOHead';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
-import { useModal } from '../context/ModalContext';
-import { CTASection } from '../components/home/CTASection';
+  PhoneCall,
+} from "lucide-react";
+import { SEOHead } from "../components/common/SEOHead";
+import { Breadcrumbs } from "../components/common/Breadcrumbs";
+import { useModal } from "../context/ModalContext";
+import { CTASection } from "../components/home/CTASection";
 
 export const StudentSupportPage: React.FC = () => {
   const { openAdvisorModal } = useModal();
 
   const services = [
     {
-      title: 'Career & Employment Clinic',
+      title: "Career & Employment Clinic",
       icon: Briefcase,
-      desc: 'Free 1-on-1 CV rewriting, mock interviews, LinkedIn optimisation, and direct employer vacancy referrals across London security, healthcare, and construction firms.'
+      desc: "Free 1-on-1 CV rewriting, mock interviews, LinkedIn optimisation, and direct employer vacancy referrals across London security, healthcare, and construction firms.",
     },
     {
-      title: 'London Accommodation Assistance',
+      title: "London Accommodation Assistance",
       icon: Home,
-      desc: 'Guidance in finding verified student halls, private house shares, and homestays near our Commercial Road campus in zones 1 & 2.'
+      desc: "Guidance in finding verified student halls, private house shares, and homestays near our Commercial Road campus in zones 1 & 2.",
     },
     {
-      title: 'Academic & English Language Support',
+      title: "Academic & English Language Support",
       icon: Languages,
-      desc: 'Free weekly study clinics for academic writing, referencing (Harvard system), grammar workshops, and speaking practice.'
+      desc: "Free weekly study clinics for academic writing, referencing (Harvard system), grammar workshops, and speaking practice.",
     },
     {
-      title: 'Visa & Immigration Compliance Care',
+      title: "Visa & Immigration Compliance Care",
       icon: ShieldCheck,
-      desc: 'Support with biometric residence permit collection, national insurance number registration, police registration, and Graduate Route preparation.'
+      desc: "Support with biometric residence permit collection, national insurance number registration, police registration, and Graduate Route preparation.",
     },
     {
-      title: 'Mental Health & Student Pastoral Welfare',
+      title: "Mental Health & Student Pastoral Welfare",
       icon: HeartHandshake,
-      desc: 'Confidential counselling, wellness resources, disability access support, and community social events.'
+      desc: "Confidential counselling, wellness resources, disability access support, and community social events.",
     },
     {
-      title: 'Alumni Network & Career Mentorship',
+      title: "Alumni Network & Career Mentorship",
       icon: Users,
-      desc: 'Connect with over 5,000 successful alumni working in NHS trusts, major security contractors, and corporate headquarters.'
-    }
+      desc: "Connect with over 5,000 successful alumni working in NHS trusts, major security contractors, and corporate headquarters.",
+    },
   ];
 
   return (
     <>
       <SEOHead
-        title="Student Support Services & Career Clinic | Apex Academy"
-        description="Discover comprehensive student support at Apex Academy: CV review clinic, London student accommodation guidance, pastoral welfare, and English language clinics."
+        title="Student Support Services & Career Clinic | Care International  Academy"
+        description="Discover comprehensive student support at Care International  Academy: CV review clinic, London student accommodation guidance, pastoral welfare, and English language clinics."
         keywords="student support London, UK student accommodation help, CV clinic London, graduate job assistance, international student welfare"
-        canonicalUrl="https://apexacademy.ac.uk/student-support"
+        canonicalUrl="https://Care International academy.ac.uk/student-support"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
-        <Breadcrumbs items={[{ label: 'Student Support' }]} />
+        <Breadcrumbs items={[{ label: "Student Support" }]} />
 
         {/* Hero */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950 text-white relative overflow-hidden">
@@ -77,11 +77,13 @@ export const StudentSupportPage: React.FC = () => {
                 We Support You from Enrolment to Graduation & Beyond
               </h1>
               <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                Our Student Experience Desk is dedicated to ensuring you thrive academically, professionally, and personally while studying at Apex Academy in London.
+                Our Student Experience Desk is dedicated to ensuring you thrive
+                academically, professionally, and personally while studying at
+                Care International Academy in London.
               </p>
               <div className="pt-2">
                 <button
-                  onClick={() => openAdvisorModal('Student Support Enquiry')}
+                  onClick={() => openAdvisorModal("Student Support Enquiry")}
                   className="px-6 py-3.5 rounded-xl font-bold bg-cyan-400 text-slate-950 hover:bg-cyan-300 transition-all shadow-lg flex items-center gap-2"
                 >
                   <PhoneCall className="w-4 h-4" />

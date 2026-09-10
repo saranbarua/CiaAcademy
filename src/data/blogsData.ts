@@ -1,12 +1,14 @@
-import { BlogPost } from '../types';
+import { BlogPost } from "../types";
 
 export const blogsData: BlogPost[] = [
   {
-    id: '1',
-    slug: 'complete-guide-to-getting-sia-door-supervisor-licence-uk',
-    title: 'The Complete 2026 Guide to Getting Your SIA Door Supervisor Licence in the UK',
-    category: 'Security & Licensing',
-    excerpt: 'Everything you need to know about mandatory SIA qualifications, training modules, First Aid requirements, criminal background checks, and expected hourly rates in London.',
+    id: "1",
+    slug: "complete-guide-to-getting-sia-door-supervisor-licence-uk",
+    title:
+      "The Complete 2026 Guide to Getting Your SIA Door Supervisor Licence in the UK",
+    category: "Security & Licensing",
+    excerpt:
+      "Everything you need to know about mandatory SIA qualifications, training modules, First Aid requirements, criminal background checks, and expected hourly rates in London.",
     content: `
 ### Why the SIA Door Supervisor Licence Remains in High Demand
 
@@ -22,22 +24,26 @@ The UK private security sector is currently experiencing unprecedented demand ac
 #### Earning Potential
 New SIA licence holders in London currently earn between **£13.50 and £18.00 per hour**, with experienced corporate security officers and close protection operatives earning upwards of **£35,000 to £45,000 annually**.
     `,
-    date: 'August 18, 2026',
-    readTime: '5 min read',
+    date: "August 18, 2026",
+    readTime: "5 min read",
     author: {
-      name: 'David Reynolds',
-      role: 'Head of Security & Compliance Training',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80'
+      name: "David Reynolds",
+      role: "Head of Security & Compliance Training",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
     },
-    image: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80',
-    tags: ['SIA Licence', 'Security Training', 'Career Guide', 'London Jobs']
+    image:
+      "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80",
+    tags: ["SIA Licence", "Security Training", "Career Guide", "London Jobs"],
   },
   {
-    id: '2',
-    slug: 'how-to-study-in-uk-step-by-step-international-students-guide',
-    title: 'How to Study in the UK: Step-by-Step Guide for International Students',
-    category: 'UK Higher Education',
-    excerpt: 'From choosing the right university pathway to mastering CAS issuance, bank statement requirements, and the Graduate Route 2-year work visa.',
+    id: "2",
+    slug: "how-to-study-in-uk-step-by-step-international-students-guide",
+    title:
+      "How to Study in the UK: Step-by-Step Guide for International Students",
+    category: "UK Higher Education",
+    excerpt:
+      "From choosing the right university pathway to mastering CAS issuance, bank statement requirements, and the Graduate Route 2-year work visa.",
     content: `
 ### Navigating Your Journey to a UK Degree
 
@@ -54,22 +60,25 @@ If you do not immediately meet direct entry requirements for a 3-year Bachelor�
 3. **TB Test & Biometrics**: Complete health screening and biometric appointments at your local VFS or TLS center.
 4. **Graduate Route Visa**: Upon degree completion, international graduates can work or seek employment in the UK for up to 2 years (3 years for PhD holders).
     `,
-    date: 'August 14, 2026',
-    readTime: '7 min read',
+    date: "August 14, 2026",
+    readTime: "7 min read",
     author: {
-      name: 'Eleanor Vance',
-      role: 'Senior International Admissions Director',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80'
+      name: "Eleanor Vance",
+      role: "Senior International Admissions Director",
+      avatar:
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
     },
-    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-    tags: ['Study in UK', 'Student Visa', 'CAS Process', 'University Pathways']
+    image:
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+    tags: ["Study in UK", "Student Visa", "CAS Process", "University Pathways"],
   },
   {
-    id: '3',
-    slug: 'how-to-get-cscs-green-card-fast-track-uk-construction',
-    title: 'How to Get Your CSCS Green Labourer Card Fast in 2026',
-    category: 'Construction & Safety',
-    excerpt: 'The step-by-step breakdown to acquiring your official CSCS card, completing the Level 1 Health & Safety exam, and booking your CITB touchscreen test.',
+    id: "3",
+    slug: "how-to-get-cscs-green-card-fast-track-uk-construction",
+    title: "How to Get Your CSCS Green Labourer Card Fast in 2026",
+    category: "Construction & Safety",
+    excerpt:
+      "The step-by-step breakdown to acquiring your official CSCS card, completing the Level 1 Health & Safety exam, and booking your CITB touchscreen test.",
     content: `
 ### Entering the UK Construction Sector
 
@@ -80,24 +89,28 @@ Major infrastructure projects across the UK require all workers on site to hold 
 2. **CITB Health, Safety & Environment Touchscreen Test for Operatives**: A 45-minute computerized exam testing your safety knowledge.
 3. **Official Card Application**: Lodging your passed certificates with CSCS to receive your 5-year Green Card.
 
-At Apex Academy, our all-in-one package allows you to complete your training, sit the mock tests, and receive full booking coordination all in a single week.
+At Care International  Academy, our all-in-one package allows you to complete your training, sit the mock tests, and receive full booking coordination all in a single week.
     `,
-    date: 'August 09, 2026',
-    readTime: '4 min read',
+    date: "August 09, 2026",
+    readTime: "4 min read",
     author: {
-      name: 'Marcus Bell',
-      role: 'Construction Safety Assessor',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'
+      name: "Marcus Bell",
+      role: "Construction Safety Assessor",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
     },
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
-    tags: ['CSCS Card', 'Construction Safety', 'CITB Test', 'Green Card']
+    image:
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
+    tags: ["CSCS Card", "Construction Safety", "CITB Test", "Green Card"],
   },
   {
-    id: '4',
-    slug: 'career-pathway-senior-care-worker-uk-diploma-level-3',
-    title: 'Career Pathway: Becoming a Senior Care Worker with a Level 3 Diploma in Adult Care',
-    category: 'Health & Social Care',
-    excerpt: 'How health and social care qualifications unlock career progression, leadership responsibilities, and UK healthcare sponsorship opportunities.',
+    id: "4",
+    slug: "career-pathway-senior-care-worker-uk-diploma-level-3",
+    title:
+      "Career Pathway: Becoming a Senior Care Worker with a Level 3 Diploma in Adult Care",
+    category: "Health & Social Care",
+    excerpt:
+      "How health and social care qualifications unlock career progression, leadership responsibilities, and UK healthcare sponsorship opportunities.",
     content: `
 ### The Crucial Role of Qualified Care Professionals
 
@@ -109,14 +122,21 @@ Senior Care Workers supervise junior care staff, administer medication, coordina
 #### Pathway to Sponsorship and High Pay
 Holding an accredited Level 3 qualification demonstrates clinical and managerial competence, making candidates prime contenders for NHS trust positions and sponsored Senior Care Worker roles.
     `,
-    date: 'August 02, 2026',
-    readTime: '6 min read',
+    date: "August 02, 2026",
+    readTime: "6 min read",
     author: {
-      name: 'Grace Holloway',
-      role: 'Lead Healthcare Lecturer (RGN, BSc)',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80'
+      name: "Grace Holloway",
+      role: "Lead Healthcare Lecturer (RGN, BSc)",
+      avatar:
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
     },
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
-    tags: ['Health & Social Care', 'NHS Jobs', 'Level 3 Diploma', 'Care Certificate']
-  }
+    image:
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+    tags: [
+      "Health & Social Care",
+      "NHS Jobs",
+      "Level 3 Diploma",
+      "Care Certificate",
+    ],
+  },
 ];
