@@ -60,28 +60,6 @@ export const Footer: React.FC = () => {
               Business Leadership, and International Higher Education Pathways.
             </p>
 
-            <div className="space-y-2.5 pt-2 text-xs text-slate-300">
-              <div className="flex items-start space-x-2.5">
-                <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                <span>
-                  Care International Education Campus, 45 Commercial Road,
-                  London E1 1LA, United Kingdom
-                </span>
-              </div>
-              <div className="flex items-center space-x-2.5">
-                <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>+44 (0) 20 8123 4567 / +44 (0) 7912 345678</span>
-              </div>
-              <div className="flex items-center space-x-2.5">
-                <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>admissions@Care International academy.ac.uk</span>
-              </div>
-              <div className="flex items-center space-x-2.5">
-                <Clock className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                <span>Mon – Fri: 09:00 - 18:00 | Sat: 10:00 - 16:00</span>
-              </div>
-            </div>
-
             <div className="pt-2 flex items-center space-x-3">
               <button
                 onClick={() => openAdvisorModal()}
@@ -89,86 +67,36 @@ export const Footer: React.FC = () => {
               >
                 Request Free Callback
               </button>
-              <button
-                onClick={() => openBrochureModal()}
-                className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-slate-200 text-xs font-bold transition-all shadow-xs"
-              >
-                Download 2026 Prospectus
-              </button>
             </div>
           </div>
 
           {/* Column 2: Popular Courses */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-white font-display">
-              Accredited Courses
+              Contact & Location
             </h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  to="/courses/security/sia-door-supervisor-course"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  SIA Door Supervisor
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/security/sia-cctv-operator-course"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  SIA CCTV Operations
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/construction/cscs-green-card-course-package"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  CSCS Green Card Package
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/construction/sssts-site-supervisors-safety-training-scheme"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  CITB SSSTS Site Safety
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/health-social-care/level-3-diploma-adult-care-health-social"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  Level 3 Diploma in Care
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/business/level-5-diploma-business-management-leadership"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  Level 5 Business Leadership
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/english/ielts-academic-general-masterclass-band-7-plus"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  IELTS Band 7.5+ Masterclass
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/professional-qualifications/acca-accounting-foundation-applied-knowledge"
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  ACCA Accounting Course
-                </Link>
-              </li>
-            </ul>
+
+            <div className="space-y-2.5 pt-2 text-xs text-slate-300">
+              <div className="flex items-start space-x-2.5">
+                <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                <span>
+                  Care International Education Campus, Lex House, 1-7 Hainault
+                  Street, Ilford, IG1 4EL
+                </span>
+              </div>
+              <div className="flex items-center space-x-2.5">
+                <Phone className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                <span> 02084788222 / 07495922582</span>
+              </div>
+              <div className="flex items-center space-x-2.5">
+                <Mail className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                <span>info@careintltd.co.uk , info@ciacademy.ac</span>
+              </div>
+              <div className="flex items-center space-x-2.5">
+                <Clock className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                <span>Mon – Fri: 10:00 - 18:00 </span>
+              </div>
+            </div>
           </div>
 
           {/* Column 3: Study in UK & International */}
