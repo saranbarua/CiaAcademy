@@ -30,7 +30,7 @@ function formatDate(iso: string) {
 
 function gbp(n?: number | null) {
   if (n === null || n === undefined) return "\u2014";
-  return `\u00a3${Number(n).toFixed(2)}`;
+  return `${Number(n).toFixed(2)}`;
 }
 
 export const ApplyPage: React.FC = () => {
@@ -392,7 +392,7 @@ export const ApplyPage: React.FC = () => {
                                 </div>
                                 <div>
                                   <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                                    {formatDate(sched.startDate)} \u2013{" "}
+                                    {formatDate(sched.startDate)} -{" "}
                                     {formatDate(sched.endDate)}
                                   </h4>
                                   <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">

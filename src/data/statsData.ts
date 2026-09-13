@@ -2,14 +2,6 @@ import { StatItem } from "../types";
 
 export const statsData: StatItem[] = [
   {
-    id: "students",
-    label: "Graduated Students",
-    value: 6500,
-    suffix: "+",
-    description: "Certified alumni working across the UK & internationally",
-    icon: "GraduationCap",
-  },
-  {
     id: "courses",
     label: "Accredited Qualifications",
     value: 50,

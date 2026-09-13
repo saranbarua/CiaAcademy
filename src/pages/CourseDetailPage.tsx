@@ -10,7 +10,6 @@ import {
   Download,
   ArrowRight,
   Building2,
-  PhoneCall,
   MapPin,
 } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";

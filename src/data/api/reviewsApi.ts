@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import apiurl from "../../apiUrl/apiUrl";
 
 const API_BASE = apiurl.mainUrl;
@@ -72,4 +73,54 @@ export function formatReviewDate(iso?: string): string {
     month: "short",
     year: "numeric",
   });
+}
+
+// ---------------------------------------------------------------------------
+// Trainee-side: submit a review (POST /reviews)
+// ---------------------------------------------------------------------------
+
+function traineeAuthHeaders() {
+  // Adjust this cookie key if trainee auth is stored under a different name
+  const token = Cookies.get("traineeToken");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export function isTraineeLoggedIn(): boolean {
+  return Boolean(Cookies.get("traineeToken"));
+}
+
+export interface CreateReviewPayload {
+  courseId: number;
+  rating: number;
+  title: string;
+  content: string;
+}
+
+export async function submitCourseReview(
+  payload: CreateReviewPayload,
+): Promise<ApiReview> {
+  const res = await fetch(`${API_BASE}/reviews`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...traineeAuthHeaders(),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.status === 401) {
+    throw new Error("Please log in to submit a review.");
+  }
+  if (!res.ok) {
+    let msg = "Could not submit your review.";
+    try {
+      const body = await res.json();
+      msg = body.error || body.message || msg;
+    } catch {
+      // ignore
+    }
+    throw new Error(msg);
+  }
+  return res.json();
 }
