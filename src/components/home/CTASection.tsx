@@ -1,15 +1,15 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import {
   Sparkles,
   ArrowRight,
   Download,
   PhoneCall,
   ShieldCheck,
-  CheckCircle2
-} from 'lucide-react';
-import { useModal } from '../../context/ModalContext';
+  CheckCircle2,
+} from "lucide-react";
+import { useModal } from "../../context/ModalContext";
 
 export const CTASection: React.FC = () => {
   const { openBrochureModal, openAdvisorModal } = useModal();
@@ -39,7 +39,9 @@ export const CTASection: React.FC = () => {
             </h2>
 
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Join thousands of certified professionals. Enroll in our next upcoming weekday or weekend batch, or speak with an advisor about degree top-up pathways.
+              Join thousands of certified professionals. Enroll in our next
+              upcoming weekday or weekend batch, or speak with an advisor about
+              degree top-up pathways.
             </p>
 
             {/* CTAs */}
@@ -52,15 +54,6 @@ export const CTASection: React.FC = () => {
                 <span>Apply Online Now</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
-
-              <button
-                onClick={() => openBrochureModal()}
-                className="px-7 py-4 rounded-2xl font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md transition-all flex items-center gap-2 shadow-xs"
-                id="cta-download-prospectus"
-              >
-                <Download className="w-4 h-4 text-cyan-300" />
-                <span>Download Prospectus</span>
-              </button>
 
               <button
                 onClick={() => openAdvisorModal()}

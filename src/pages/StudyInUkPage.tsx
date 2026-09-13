@@ -147,7 +147,7 @@ const InquiryFormSection: React.FC = () => {
       <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-10 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-cyan-950/80 px-3.5 py-1.5 rounded-full border border-cyan-800/60 inline-flex items-center gap-1.5 mb-3">
             <Sparkles className="w-3.5 h-3.5" />
@@ -195,7 +195,7 @@ const InquiryFormSection: React.FC = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className={labelClass}>First name *</label>
                 <input
@@ -491,79 +491,6 @@ export const StudyInUkPage: React.FC = () => {
                     eligibility
                   </li>
                 </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Pathways Breakdown Tabs */}
-        <section className="py-16 bg-slate-50 dark:bg-[#0E1322]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <h2 className="text-3xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white">
-                Choose Your Progression Discipline
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-md space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-                  BA
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
-                  Business & Management
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 4 & 5 Extended Diploma in Business leading to BA (Hons)
-                  in Business Management, Marketing, or Finance.
-                </p>
-                <Link
-                  to="/courses/business"
-                  className="inline-flex items-center text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline gap-1 pt-2"
-                >
-                  <span>View Syllabus</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-md space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-slate-800 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
-                  BSc
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
-                  Health & Social Care Leadership
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 4 & 5 Diploma in Adult Care leading to BSc (Hons) in
-                  Health & Social Care Services Management.
-                </p>
-                <Link
-                  to="/courses/health-social-care"
-                  className="inline-flex items-center text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline gap-1 pt-2"
-                >
-                  <span>View Syllabus</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-md space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-slate-800 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
-                  MSc
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
-                  Postgraduate / MBA Top-Up
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Level 7 Post-Graduate Diploma leading directly to MBA
-                  dissertation stage (6 months) at UK universities.
-                </p>
-                <Link
-                  to="/courses/business"
-                  className="inline-flex items-center text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline gap-1 pt-2"
-                >
-                  <span>View Syllabus</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             </div>
           </div>
