@@ -1,51 +1,82 @@
-import React, { useState } from "react";
-import { motion } from "motion/react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import {
-  Calendar,
-  Clock,
-  User,
-  Search,
-  ArrowRight,
-  BookOpen,
-  Tag,
-} from "lucide-react";
+import { Calendar, Search, ArrowRight } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
 import { Breadcrumbs } from "../components/common/Breadcrumbs";
-import { blogsData } from "../data/blogsData";
+import {
+  fetchPublishedBlogs,
+  formatBlogDate,
+  ApiBlogListItem,
+} from "../data/api/blogApi";
+
+function BlogCardSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-800/90 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-md animate-pulse">
+      <div className="aspect-[16/10] bg-slate-200 dark:bg-slate-700" />
+      <div className="p-6 space-y-3">
+        <div className="h-3 w-1/3 bg-slate-200 dark:bg-slate-700 rounded" />
+        <div className="h-5 w-4/5 bg-slate-200 dark:bg-slate-700 rounded" />
+        <div className="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded" />
+      </div>
+    </div>
+  );
+}
 
 export const BlogPage: React.FC = () => {
+  const [posts, setPosts] = useState<ApiBlogListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTag, setSelectedTag] = useState("All");
 
-  const categories = [
-    "All",
-    "Security Careers",
-    "Study in UK",
-    "Construction",
-    "Healthcare",
-    "Study Skills",
-  ];
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    fetchPublishedBlogs()
+      .then((data) => !cancelled && setPosts(data))
+      .catch(
+        (err) =>
+          !cancelled && setError(err.message || "Could not load blog posts."),
+      )
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const filteredBlogs = blogsData.filter((b) => {
-    if (selectedCategory !== "All" && b.category !== selectedCategory)
-      return false;
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q)
-      );
-    }
-    return true;
-  });
+  // The API doesn't expose a "category" field — tags are the closest
+  // equivalent, so build the filter chips from whatever tags actually
+  // appear across published posts.
+  const tags = useMemo(() => {
+    const set = new Set<string>();
+    posts.forEach((p) => (p.tags || []).forEach((t) => set.add(t)));
+    return ["All", ...Array.from(set).sort()];
+  }, [posts]);
+
+  const filteredBlogs = useMemo(() => {
+    return posts.filter((b) => {
+      if (selectedTag !== "All" && !(b.tags || []).includes(selectedTag))
+        return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        return (
+          b.title?.toLowerCase().includes(q) ||
+          b.excerpt?.toLowerCase().includes(q)
+        );
+      }
+      return true;
+    });
+  }, [posts, searchQuery, selectedTag]);
 
   return (
     <>
       <SEOHead
-        title="Care International  Academy Blog | UK Education Guides, Licencing News & Visa Insights"
+        title="Care International Academy Blog | UK Education Guides, Licencing News & Visa Insights"
         description="Read the latest articles on SIA licences, CSCS card requirements, UK university degree top-up pathways, and student visa updates."
-        keywords="Care International  Academy blog, SIA licence guide 2026, CSCS card steps, UK student visa news, healthcare NVQ salary UK"
-        canonicalUrl="https://Care International academy.ac.uk/blog"
+        keywords="Care International Academy blog, SIA licence guide 2026, CSCS card steps, UK student visa news, healthcare NVQ salary UK"
+        canonicalUrl="https://careinternationalacademy.ac.uk/blog"
       />
 
       <div className="bg-slate-50 dark:bg-[#0B0F19] min-h-screen pb-20">
@@ -83,81 +114,100 @@ export const BlogPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center space-x-2 overflow-x-auto w-full md:w-auto no-scrollbar">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-                    selectedCategory === cat
-                      ? "bg-indigo-600 text-white shadow-sm"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            {tags.length > 1 && (
+              <div className="flex items-center space-x-2 overflow-x-auto w-full md:w-auto no-scrollbar">
+                {tags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag(tag)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
+                      selectedTag === tag
+                        ? "bg-indigo-600 text-white shadow-sm"
+                        : "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
+
+          {error && (
+            <div className="mb-8 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm text-red-600 dark:text-red-300">
+              {error}
+            </div>
+          )}
 
           {/* Blog Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs.map((blog) => (
-              <article
-                key={blog.id}
-                className="bg-white dark:bg-slate-800/90 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-xl transition-all flex flex-col group"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-md">
-                    {blog.category}
-                  </span>
-                </div>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <BlogCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : filteredBlogs.length === 0 ? (
+            <div className="p-12 text-center bg-white dark:bg-slate-800/80 rounded-3xl border border-slate-200 dark:border-slate-700">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
+                No articles match your search
+              </h3>
+              <p className="text-xs text-slate-500 mt-2">
+                Try a different keyword or tag.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredBlogs.map((blog) => (
+                <article
+                  key={blog.id}
+                  className="bg-white dark:bg-slate-800/90 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-xl transition-all flex flex-col group"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                    <img
+                      src={blog.featuredImage || "/placeholder-blog.jpg"}
+                      alt={blog.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {blog.tags?.[0] && (
+                      <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-md">
+                        {blog.tags[0]}
+                      </span>
+                    )}
+                  </div>
 
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                  <div>
-                    <div className="flex items-center space-x-3 text-xs text-slate-400 mb-2">
-                      <span className="flex items-center">
-                        <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {new Date(blog.date).toLocaleDateString("en-GB", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center">
-                        <Clock className="w-3.5 h-3.5 mr-1" />
-                        {blog.readTime}
-                      </span>
+                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                      <div className="flex items-center space-x-3 text-xs text-slate-400 mb-2">
+                        <span className="flex items-center">
+                          <Calendar className="w-3.5 h-3.5 mr-1" />
+                          {formatBlogDate(blog.publishedAt)}
+                        </span>
+                        <span>{blog.viewCount ?? 0} views</span>
+                      </div>
+
+                      <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+                        <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
+                      </h3>
+
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">
+                        {blog.excerpt}
+                      </p>
                     </div>
 
-                    <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
-                      <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
-                    </h3>
-
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed">
-                      {blog.excerpt}
-                    </p>
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-700/60">
+                      <Link
+                        to={`/blog/${blog.slug}`}
+                        className="inline-flex items-center text-xs font-bold text-indigo-600 dark:text-cyan-400 hover:underline gap-1"
+                      >
+                        <span>Read Full Article</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-700/60">
-                    <Link
-                      to={`/blog/${blog.slug}`}
-                      className="inline-flex items-center text-xs font-bold text-indigo-600 dark:text-cyan-400 hover:underline gap-1"
-                    >
-                      <span>Read Full Article</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>
