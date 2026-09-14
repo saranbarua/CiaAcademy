@@ -8,6 +8,7 @@ import {
   formatBlogDate,
   ApiBlogListItem,
 } from "../data/api/blogApi";
+import apiurl from "../apiUrl/apiUrl";
 
 function BlogCardSkeleton() {
   return (
@@ -69,6 +70,11 @@ export const BlogPage: React.FC = () => {
       return true;
     });
   }, [posts, searchQuery, selectedTag]);
+
+  const fullImg = (url) => {
+    if (!url) return "/placeholder.png";
+    return `${apiurl.imgUrl}${url}`;
+  };
 
   return (
     <>
@@ -164,7 +170,7 @@ export const BlogPage: React.FC = () => {
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-900">
                     <img
-                      src={blog.featuredImage || "/placeholder-blog.jpg"}
+                      src={fullImg(blog.featuredImage)}
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

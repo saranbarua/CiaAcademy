@@ -13,6 +13,7 @@ import {
   ApiBlogDetail,
   ApiBlogListItem,
 } from "../data/api/blogApi";
+import apiurl from "../apiUrl/apiUrl";
 
 function DetailSkeleton() {
   return (
@@ -114,6 +115,11 @@ export const BlogDetailPage: React.FC = () => {
     description: blog.excerpt,
   };
 
+  const fullImg = (url) => {
+    if (!url) return "/placeholder.png";
+    return `${apiurl.imgUrl}${url}`;
+  };
+
   return (
     <>
       <SEOHead
@@ -178,7 +184,7 @@ export const BlogDetailPage: React.FC = () => {
           {blog.featuredImage && (
             <div className="rounded-3xl overflow-hidden shadow-xl mb-10 aspect-[16/9] bg-slate-100 dark:bg-slate-900">
               <img
-                src={blog.featuredImage}
+                src={fullImg(blog.featuredImage)}
                 alt={blog.title}
                 className="w-full h-full object-cover"
               />
@@ -231,7 +237,7 @@ export const BlogDetailPage: React.FC = () => {
                     className="p-4 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors flex items-center gap-3"
                   >
                     <img
-                      src={r.featuredImage || "/placeholder-blog.jpg"}
+                      src={fullImg(r.featuredImage)}
                       alt={r.title}
                       className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
                     />
