@@ -17,7 +17,7 @@ import {
   fetchSchedulesForCourse,
   ApiScheduleForCourse,
 } from "../data/api/schedulesApi";
-import { createBooking } from "../data/api/bookingsApi";
+import { createBooking, ApiBooking } from "../data/api/bookingsApi";
 import { useTraineeAuth } from "../context/TraineeAuthContext";
 
 function formatDate(iso: string) {
@@ -30,7 +30,7 @@ function formatDate(iso: string) {
 
 function gbp(n?: number | null) {
   if (n === null || n === undefined) return "\u2014";
-  return `${Number(n).toFixed(2)}`;
+  return `\u00a3${Number(n).toFixed(2)}`;
 }
 
 export const ApplyPage: React.FC = () => {
@@ -41,7 +41,11 @@ export const ApplyPage: React.FC = () => {
 
   const [step, setStep] = useState<number>(1);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [bookingRef, setBookingRef] = useState("");
+  // Keep the whole booking response — the success screen needs the actual
+  // charged amounts (totalAmount/depositAmount/balanceAmount), not just the ref.
+  const [completedBooking, setCompletedBooking] = useState<ApiBooking | null>(
+    null,
+  );
 
   const [courses, setCourses] = useState<ApiCourse[]>([]);
   const [coursesLoading, setCoursesLoading] = useState(true);
@@ -142,11 +146,13 @@ export const ApplyPage: React.FC = () => {
         notes: notes || undefined,
         specialRequirements: specialRequirements || undefined,
       });
-      setBookingRef(result.bookingRef);
+      setCompletedBooking(result);
       setIsCompleted(true);
       confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
       window.scrollTo({ top: 100, behavior: "smooth" });
     } catch (err: any) {
+      // Doc calls out two specific 400s worth surfacing clearly:
+      // "Schedule is full" and "You already have a booking for this schedule"
       setError(
         err.message || "Could not submit your application. Please try again.",
       );
@@ -160,6 +166,20 @@ export const ApplyPage: React.FC = () => {
       setStep((prev) => prev - 1);
       window.scrollTo({ top: 200, behavior: "smooth" });
     }
+  };
+
+  // Sends the trainee to /payment/:bookingId with everything the payment
+  // page needs already in hand, so it doesn't have to re-fetch the booking.
+  const handlePayDepositNow = () => {
+    if (!completedBooking) return;
+    navigate(`/payment/${completedBooking.id}`, {
+      state: {
+        amount: completedBooking.depositAmount,
+        type: "deposit",
+        courseTitle: completedBooking.course?.title || selectedCourse?.title,
+        bookingRef: completedBooking.bookingRef,
+      },
+    });
   };
 
   return (
@@ -231,7 +251,7 @@ export const ApplyPage: React.FC = () => {
           )}
 
           <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-700/80 shadow-xl">
-            {isCompleted ? (
+            {isCompleted && completedBooking ? (
               <div className="text-center space-y-6 py-6">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
                   <CheckCircle2 className="w-8 h-8" />
@@ -246,8 +266,14 @@ export const ApplyPage: React.FC = () => {
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
                     We've received your booking for{" "}
-                    <strong>{selectedCourse?.title}</strong>. Your enrolment is
-                    now pending confirmation from our admissions team.
+                    <strong>
+                      {completedBooking.course?.title || selectedCourse?.title}
+                    </strong>
+                    . Your enrolment status is currently{" "}
+                    <strong className="text-amber-600 dark:text-amber-400">
+                      {completedBooking.status || "PENDING"}
+                    </strong>
+                    , pending confirmation from our admissions team.
                   </p>
                 </div>
 
@@ -257,7 +283,7 @@ export const ApplyPage: React.FC = () => {
                       Booking Ref:
                     </span>
                     <strong className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
-                      {bookingRef}
+                      {completedBooking.bookingRef}
                     </strong>
                   </div>
                   <div className="flex justify-between">
@@ -274,9 +300,62 @@ export const ApplyPage: React.FC = () => {
                       {selectedSchedule?.venue?.city}
                     </strong>
                   </div>
+
+                  {/* Payment breakdown — from the actual booking response, not the course list price */}
+                  <div className="pt-2 mt-1 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+                    <div className="flex justify-between">
+                      <span>Total Fee:</span>
+                      <strong className="text-slate-900 dark:text-white">
+                        {gbp(completedBooking.totalAmount)}
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Deposit due now:</span>
+                      <strong
+                        className={
+                          completedBooking.depositPaid
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-amber-600 dark:text-amber-400"
+                        }
+                      >
+                        {gbp(completedBooking.depositAmount)}{" "}
+                        {completedBooking.depositPaid
+                          ? "\u2713 Paid"
+                          : "(Unpaid)"}
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Remaining balance:</span>
+                      <strong
+                        className={
+                          completedBooking.balancePaid
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-slate-700 dark:text-slate-300"
+                        }
+                      >
+                        {gbp(completedBooking.balanceAmount)}{" "}
+                        {completedBooking.balancePaid ? "\u2713 Paid" : ""}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {!completedBooking.depositPaid && (
+                    <p className="text-[11px] text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 rounded-lg px-3 py-2 mt-2">
+                      Your seat is reserved but not yet confirmed. Please pay
+                      the deposit now to secure it.
+                    </p>
+                  )}
                 </div>
 
                 <div className="pt-4 flex flex-wrap justify-center gap-3">
+                  {!completedBooking.depositPaid && (
+                    <button
+                      onClick={handlePayDepositNow}
+                      className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
+                    >
+                      Pay Deposit Now ({gbp(completedBooking.depositAmount)})
+                    </button>
+                  )}
                   <Link
                     to="/my-account"
                     className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
@@ -457,6 +536,10 @@ export const ApplyPage: React.FC = () => {
                           )}
                         </strong>
                       </div>
+                      <p className="text-[11px] text-slate-400 pt-1">
+                        The exact deposit and balance split will be confirmed on
+                        your booking receipt after submission.
+                      </p>
                     </div>
 
                     <div>

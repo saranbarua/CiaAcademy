@@ -28,6 +28,7 @@ import { TraineeLoginPage } from "./pages/TraineeLoginPage";
 import { TraineeRegisterPage } from "./pages/TraineeRegisterPage";
 import { ProtectedTraineeRoute } from "./context/ProtectedTraineeRoute";
 import { MyAccountPage } from "./pages/MyAccountPage";
+import { PaymentPage } from "./pages/PaymentPage";
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
                   path="/courses/:category/:slug"
                   element={<CourseDetailPage />}
                 />
+                <Route path="/payment/:bookingId" element={<PaymentPage />} />
                 <Route path="/study-in-uk" element={<StudyInUkPage />} />
                 <Route path="/admissions" element={<AdmissionsPage />} />
                 <Route
