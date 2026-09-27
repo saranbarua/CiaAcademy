@@ -1,166 +1,168 @@
 // src/pages/PaymentPage.tsx
 //
-// Usage:
-//   Route: <Route path="/payment/:bookingId" element={<PaymentPage />} />
-//
-//   Navigate to it after a booking is created, passing what you already have
-//   so we don't need an extra fetch:
-//     navigate(`/payment/${completedBooking.id}`, {
-//       state: {
-//         amount: completedBooking.depositAmount,
-//         type: "deposit",
-//         courseTitle: completedBooking.course?.title,
-//         bookingRef: completedBooking.bookingRef,
-//       },
-//     });
-//
-//   If the page is opened directly (e.g. from an email link / "Pay Now" in
-//   My Account) with no location.state, it falls back to fetching the
-//   trainee's bookings and reading the amount from there.
+// Route: /payment/:bookingId
+// Expects location.state (set by ApplyPage / MyAccountPage) with:
+//   { type: "deposit" | "balance", courseTitle?, bookingRef?, amount? }
+// `amount` is only used for display — the actual charge is decided by the
+// backend from the booking, per POST /payments/my/intent.
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
-  CardElement,
+  PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { CheckCircle2, AlertCircle, ShieldCheck, Lock } from "lucide-react";
+import { AlertCircle, ShieldCheck, Lock, Loader2 } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
-import { createPaymentIntent, PaymentType } from "../data/api/paymentsApi";
-import { useTraineeAuth } from "../context/TraineeAuthContext";
+import { createMyPaymentIntent, PaymentType } from "../data/api/paymentsApi";
+import { fetchMyBookings } from "../data/api/bookingsApi";
+import { useBookingPaymentPolling } from "../data/api/useBookingPaymentPolling";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-function gbp(n?: number | null) {
-  if (n === null || n === undefined) return "\u2014";
+function gbp(n?: number | string | null) {
+  if (n === null || n === undefined || n === "") return "\u2014";
   return `\u00a3${Number(n).toFixed(2)}`;
 }
 
 interface LocationState {
-  amount?: number;
   type?: PaymentType;
   courseTitle?: string;
   bookingRef?: string;
+  amount?: number | string;
 }
 
-const cardElementOptions = {
-  style: {
-    base: {
-      fontSize: "14px",
-      color: "#0f172a",
-      fontFamily: "inherit",
-      "::placeholder": { color: "#94a3b8" },
-    },
-    invalid: { color: "#e11d48" },
-  },
-};
+function ConfirmingScreen() {
+  return (
+    <div className="text-center py-10 space-y-3">
+      <Loader2 className="w-8 h-8 text-indigo-600 mx-auto animate-spin" />
+      <p className="text-sm text-slate-600 dark:text-slate-300">
+        Confirming your payment\u2026
+      </p>
+      <p className="text-xs text-slate-400">
+        This can take a few seconds while we hear back from Stripe.
+      </p>
+    </div>
+  );
+}
+
+function ConfirmedScreen({ bookingRef }: { bookingRef?: string }) {
+  return (
+    <div className="text-center space-y-4 py-6">
+      <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
+        <ShieldCheck className="w-8 h-8" />
+      </div>
+      <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
+        Payment Confirmed
+      </h2>
+      <p className="text-sm text-slate-600 dark:text-slate-300">
+        {bookingRef ? (
+          <>
+            Your payment for booking <strong>{bookingRef}</strong> has been
+            received.
+          </>
+        ) : (
+          "Your payment has been received."
+        )}
+      </p>
+      <Link
+        to="/my-account"
+        className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
+      >
+        View My Bookings
+      </Link>
+    </div>
+  );
+}
+
+function TimeoutScreen({ traineeEmail }: { traineeEmail?: string }) {
+  return (
+    <div className="text-center space-y-4 py-6">
+      <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
+      <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+        Still confirming\u2026
+      </h2>
+      <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
+        Your payment is taking a little longer to confirm than usual.
+        {traineeEmail
+          ? ` We'll email a receipt to ${traineeEmail} as soon as it's done.`
+          : " You'll get an email receipt as soon as it's done."}
+      </p>
+      <Link
+        to="/my-account"
+        className="inline-block px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-colors"
+      >
+        Check My Bookings
+      </Link>
+    </div>
+  );
+}
 
 const CheckoutForm: React.FC<{
   bookingId: number;
-  amount: number;
   type: PaymentType;
+  amountLabel: string;
   courseTitle?: string;
   bookingRef?: string;
-}> = ({ bookingId, amount, type, courseTitle, bookingRef }) => {
+}> = ({ bookingId, type, amountLabel, courseTitle, bookingRef }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const { trainee } = useTraineeAuth();
-  const navigate = useNavigate();
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [succeeded, setSucceeded] = useState(false);
+  // Once true, we hand off entirely to polling (Signal 3) — the client-side
+  // confirmPayment result is only ever a hint, never the final word.
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
+
+  const { state } = useBookingPaymentPolling(bookingId, {
+    skip: !awaitingConfirmation,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
     if (!stripe || !elements) return;
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) return;
-
     setSubmitting(true);
-    try {
-      const { clientSecret } = await createPaymentIntent({
-        bookingId,
-        amount,
-        type,
-      });
+    setError(null);
 
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: trainee?.name || undefined,
-            email: trainee?.email || undefined,
-          },
-        },
-      });
+    const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/booking/${bookingId}/result?type=${type}`,
+      },
+      redirect: "if_required",
+    });
 
-      if (result.error) {
-        setError(
-          result.error.message ||
-            "Your card was declined. Please try a different card.",
-        );
-        return;
-      }
-
-      if (result.paymentIntent?.status === "succeeded") {
-        setSucceeded(true);
-        // Final booking status (CONFIRMED / balancePaid) is set server-side
-        // by the Stripe webhook, not by this client call. It should already
-        // have landed by the time this resolves, but treat it as
-        // "processing" rather than instant if you show live booking status
-        // elsewhere.
-      } else {
-        // e.g. requires_action already handled by confirmCardPayment, but
-        // cover any other non-succeeded terminal state defensively.
-        setError(
-          "Payment could not be completed. Please try again or use a different card.",
-        );
-      }
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
+    if (stripeError) {
+      setError(
+        stripeError.message ||
+          "Your card was declined. Please try a different card.",
+      );
       setSubmitting(false);
+      return;
     }
+
+    // No redirect happened (no 3DS needed) — paymentIntent.status is a hint
+    // only. Either way, start polling; that's the only authoritative signal.
+    if (
+      paymentIntent?.status === "succeeded" ||
+      paymentIntent?.status === "processing"
+    ) {
+      setAwaitingConfirmation(true);
+    } else {
+      setError("Payment could not be completed. Please try again.");
+    }
+    setSubmitting(false);
   };
 
-  if (succeeded) {
-    return (
-      <div className="text-center space-y-5 py-6">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
-          <CheckCircle2 className="w-8 h-8" />
-        </div>
-        <div className="space-y-1.5">
-          <h2 className="text-xl font-extrabold font-display text-slate-900 dark:text-white">
-            Payment Successful
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
-            We've received your {type} payment of <strong>{gbp(amount)}</strong>
-            {bookingRef && (
-              <>
-                {" "}
-                for booking <strong>{bookingRef}</strong>
-              </>
-            )}
-            . Your booking will update to reflect this shortly.
-          </p>
-        </div>
-        <div className="pt-2 flex justify-center gap-3">
-          <Link
-            to="/my-account"
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
-          >
-            View My Bookings
-          </Link>
-        </div>
-      </div>
-    );
+  if (awaitingConfirmation) {
+    if (state === "confirmed")
+      return <ConfirmedScreen bookingRef={bookingRef} />;
+    if (state === "timeout") return <TimeoutScreen />;
+    return <ConfirmingScreen />;
   }
 
   return (
@@ -192,18 +194,16 @@ const CheckoutForm: React.FC<{
         <div className="flex justify-between pt-2 border-t border-slate-200 dark:border-slate-800">
           <span className="capitalize">{type} due now:</span>
           <strong className="text-indigo-600 dark:text-indigo-400 text-sm">
-            {gbp(amount)}
+            {amountLabel}
           </strong>
         </div>
       </div>
 
       <div>
         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-          Card details
+          Payment details
         </label>
-        <div className="px-3.5 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus-within:border-indigo-500">
-          <CardElement options={cardElementOptions} />
-        </div>
+        <PaymentElement />
       </div>
 
       <button
@@ -212,7 +212,7 @@ const CheckoutForm: React.FC<{
         className="w-full px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
       >
         <Lock className="w-4 h-4" />
-        <span>{submitting ? "Processing\u2026" : `Pay ${gbp(amount)}`}</span>
+        <span>{submitting ? "Processing\u2026" : `Pay ${amountLabel}`}</span>
       </button>
 
       <p className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
@@ -229,63 +229,94 @@ export const PaymentPage: React.FC = () => {
   const location = useLocation();
   const state = (location.state || {}) as LocationState;
 
-  const [amount, setAmount] = useState<number | null>(state.amount ?? null);
+  const numericBookingId = useMemo(
+    () => (bookingId ? Number(bookingId) : null),
+    [bookingId],
+  );
+
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [type, setType] = useState<PaymentType | null>(state.type ?? null);
+  const [amount, setAmount] = useState<number | string | null>(
+    state.amount ?? null,
+  );
   const [courseTitle, setCourseTitle] = useState<string | undefined>(
     state.courseTitle,
   );
   const [bookingRef, setBookingRef] = useState<string | undefined>(
     state.bookingRef,
   );
-  const [loading, setLoading] = useState(!state.amount);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const numericBookingId = useMemo(
-    () => (bookingId ? Number(bookingId) : null),
-    [bookingId],
-  );
-
-  // Fallback: if the page was opened without location.state (direct link,
-  // refresh, "Pay Now" from My Account), look the booking up instead.
   useEffect(() => {
-    if (state.amount || !numericBookingId) {
+    if (!numericBookingId) {
+      setError("Missing booking reference.");
       setLoading(false);
       return;
     }
 
     let cancelled = false;
-    import("../data/api/bookingsApi")
-      .then(({ fetchMyBookings }) => fetchMyBookings())
-      .then((bookings: any[]) => {
-        if (cancelled) return;
-        const booking = bookings.find((b) => b.id === numericBookingId);
-        if (!booking) {
-          setLoadError("We couldn't find that booking on your account.");
-          return;
-        }
-        setCourseTitle(booking.course?.title);
-        setBookingRef(booking.bookingRef);
-        if (!booking.depositPaid) {
-          setAmount(booking.depositAmount);
-          setType("deposit");
-        } else if (!booking.balancePaid) {
-          setAmount(booking.balanceAmount);
-          setType("balance");
-        } else {
-          setLoadError("This booking is already fully paid.");
-        }
-      })
-      .catch(
-        (err) =>
-          !cancelled &&
-          setLoadError(err.message || "Could not load booking details."),
-      )
-      .finally(() => !cancelled && setLoading(false));
 
+    async function resolveDetailsAndIntent() {
+      try {
+        let resolvedType = state.type;
+
+        // If we weren't handed the type/course/ref (e.g. direct link, page
+        // refresh mid-flow), figure out what's still owed from the booking.
+        if (!resolvedType || !state.courseTitle) {
+          const bookings = await fetchMyBookings();
+          const match = (bookings || []).find(
+            (b: any) => b.id === numericBookingId,
+          );
+          if (!match) {
+            throw new Error("We couldn't find that booking on your account.");
+          }
+          if (cancelled) return;
+
+          setCourseTitle(match.course?.title);
+          setBookingRef(match.bookingRef);
+
+          if (!resolvedType) {
+            if (!match.depositPaid) {
+              resolvedType = "deposit";
+              setAmount(match.depositAmount);
+            } else if (!match.balancePaid) {
+              resolvedType = "balance";
+              setAmount(match.balanceAmount);
+            } else {
+              throw new Error("This booking is already fully paid.");
+            }
+          } else {
+            setAmount(
+              resolvedType === "deposit"
+                ? match.depositAmount
+                : match.balanceAmount,
+            );
+          }
+          setType(resolvedType);
+        }
+
+        const intent = await createMyPaymentIntent({
+          bookingId: numericBookingId,
+          type: resolvedType as PaymentType,
+        });
+        if (!cancelled) setClientSecret(intent.clientSecret);
+      } catch (err: any) {
+        if (!cancelled)
+          setError(err.message || "Could not start this payment.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    resolveDetailsAndIntent();
     return () => {
       cancelled = true;
     };
-  }, [numericBookingId, state.amount]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numericBookingId]);
+
+  const amountLabel = gbp(amount);
 
   return (
     <>
@@ -310,12 +341,12 @@ export const PaymentPage: React.FC = () => {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-700/80 shadow-xl">
             {loading ? (
-              <div className="h-40 rounded-xl bg-slate-100 dark:bg-slate-900 animate-pulse" />
-            ) : loadError || !numericBookingId || !amount || !type ? (
+              <div className="h-48 rounded-xl bg-slate-100 dark:bg-slate-900 animate-pulse" />
+            ) : error || !clientSecret || !numericBookingId || !type ? (
               <div className="text-center space-y-4 py-6">
                 <AlertCircle className="w-10 h-10 text-rose-500 mx-auto" />
                 <p className="text-sm text-slate-600 dark:text-slate-300">
-                  {loadError || "We couldn't find a payment to process."}
+                  {error || "We couldn't find a payment to process."}
                 </p>
                 <Link
                   to="/my-account"
@@ -325,11 +356,11 @@ export const PaymentPage: React.FC = () => {
                 </Link>
               </div>
             ) : (
-              <Elements stripe={stripePromise}>
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
                 <CheckoutForm
                   bookingId={numericBookingId}
-                  amount={amount}
                   type={type}
+                  amountLabel={amountLabel}
                   courseTitle={courseTitle}
                   bookingRef={bookingRef}
                 />
