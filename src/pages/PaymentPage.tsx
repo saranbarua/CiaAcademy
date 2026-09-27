@@ -13,7 +13,9 @@ import { createMyPaymentIntent, PaymentType } from "../data/api/paymentsApi";
 import { fetchMyBookings } from "../data/api/bookingsApi";
 import { useBookingPaymentPolling } from "../data/api/useBookingPaymentPolling";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  "pk_test_51UEkyWBUzRTyeMD9Fucub4QdnGoLv9k8zzOAm4KG77qHGb4K7hGhCywFmvzyPKZKrlQmbjzf2GTe2OEhsO5LpBno00SeoMpNTL",
+);
 
 function gbp(n?: number | string | null) {
   if (n === null || n === undefined || n === "") return "\u2014";

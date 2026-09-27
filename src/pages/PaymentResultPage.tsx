@@ -5,7 +5,9 @@ import { AlertCircle, ShieldCheck, Loader2 } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
 import { useBookingPaymentPolling } from "../data/api/useBookingPaymentPolling";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  "pk_test_51UEkyWBUzRTyeMD9Fucub4QdnGoLv9k8zzOAm4KG77qHGb4K7hGhCywFmvzyPKZKrlQmbjzf2GTe2OEhsO5LpBno00SeoMpNTL",
+);
 
 type Hint = "checking" | "processing" | "failed";
 
