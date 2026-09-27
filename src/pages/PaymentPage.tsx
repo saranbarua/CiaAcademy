@@ -1,11 +1,3 @@
-// src/pages/PaymentPage.tsx
-//
-// Route: /payment/:bookingId
-// Expects location.state (set by ApplyPage / MyAccountPage) with:
-//   { type: "deposit" | "balance", courseTitle?, bookingRef?, amount? }
-// `amount` is only used for display — the actual charge is decided by the
-// backend from the booking, per POST /payments/my/intent.
-
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
