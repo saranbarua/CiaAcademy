@@ -34,7 +34,7 @@ function ConfirmingScreen() {
     <div className="text-center py-10 space-y-3">
       <Loader2 className="w-8 h-8 text-indigo-600 mx-auto animate-spin" />
       <p className="text-sm text-slate-600 dark:text-slate-300">
-        Confirming your payment\u2026
+        Confirming your payment
       </p>
       <p className="text-xs text-slate-400">
         This can take a few seconds while we hear back from Stripe.
@@ -72,7 +72,36 @@ function ConfirmedScreen({ bookingRef }: { bookingRef?: string }) {
   );
 }
 
-function TimeoutScreen({ traineeEmail }: { traineeEmail?: string }) {
+// function TimeoutScreen({ traineeEmail }: { traineeEmail?: string }) {
+//   return (
+//     <div className="text-center space-y-4 py-6">
+//       <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
+//       <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+//         Still confirming\u2026
+//       </h2>
+//       <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
+//         Your payment is taking a little longer to confirm than usual.
+//         {traineeEmail
+//           ? ` We'll email a receipt to ${traineeEmail} as soon as it's done.`
+//           : " You'll get an email receipt as soon as it's done."}
+//       </p>
+//       <Link
+//         to="/my-account"
+//         className="inline-block px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-colors"
+//       >
+//         Check My Bookings
+//       </Link>
+//     </div>
+//   );
+// }
+// TimeoutScreen কে একটু আপডেট করুন — retry বাটন যোগ করে
+function TimeoutScreen({
+  traineeEmail,
+  onRetryCheck,
+}: {
+  traineeEmail?: string;
+  onRetryCheck: () => void;
+}) {
   return (
     <div className="text-center space-y-4 py-6">
       <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
@@ -80,21 +109,28 @@ function TimeoutScreen({ traineeEmail }: { traineeEmail?: string }) {
         Still confirming\u2026
       </h2>
       <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
-        Your payment is taking a little longer to confirm than usual.
+        Your payment is taking longer than usual to confirm.
         {traineeEmail
           ? ` We'll email a receipt to ${traineeEmail} as soon as it's done.`
           : " You'll get an email receipt as soon as it's done."}
       </p>
-      <Link
-        to="/my-account"
-        className="inline-block px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-colors"
-      >
-        Check My Bookings
-      </Link>
+      <div className="flex justify-center gap-3">
+        <button
+          onClick={onRetryCheck}
+          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
+        >
+          Check Again
+        </button>
+        <Link
+          to="/my-account"
+          className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-colors"
+        >
+          Check My Bookings
+        </Link>
+      </div>
     </div>
   );
 }
-
 const CheckoutForm: React.FC<{
   bookingId: number;
   type: PaymentType;
