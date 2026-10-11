@@ -1,6 +1,6 @@
 // src/pages/MyAccountPage.tsx
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   User,
   Mail,
@@ -14,6 +14,7 @@ import {
   BookOpen,
   Clock,
   ArrowRight,
+  CreditCard,
 } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
 import { Breadcrumbs } from "../components/common/Breadcrumbs";
@@ -62,6 +63,7 @@ export const MyAccountPage: React.FC = () => {
     refreshProfile,
     logout,
   } = useTraineeAuth();
+  const navigate = useNavigate();
 
   const [tab, setTab] = useState<"profile" | "bookings">("profile");
 
@@ -388,6 +390,18 @@ export const MyAccountPage: React.FC = () => {
               ) : (
                 bookings.map((booking) => {
                   const meta = bookingStatusMeta(booking.status);
+                  const payable =
+                    booking.status !== "CANCELLED" &&
+                    booking.status !== "REFUNDED" &&
+                    booking.status !== "WAITLISTED" &&
+                    booking.status !== "COMPLETED";
+                  const payType: "deposit" | "balance" | null = !payable
+                    ? null
+                    : !booking.depositPaid
+                      ? "deposit"
+                      : !booking.balancePaid
+                        ? "balance"
+                        : null;
                   return (
                     <div
                       key={booking.id}
@@ -419,7 +433,7 @@ export const MyAccountPage: React.FC = () => {
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-3.5 h-3.5" />
                           <span>
-                            {formatDate(booking.schedule?.startDate)} \u2013{" "}
+                            {formatDate(booking.schedule?.startDate)} –{" "}
                             {formatDate(booking.schedule?.endDate)}
                           </span>
                         </div>
@@ -433,7 +447,7 @@ export const MyAccountPage: React.FC = () => {
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5" />
                           <span>
-                            {booking.schedule?.startTime} \u2013{" "}
+                            {booking.schedule?.startTime} –{" "}
                             {booking.schedule?.endTime}
                           </span>
                         </div>
@@ -452,7 +466,7 @@ export const MyAccountPage: React.FC = () => {
                             className={`font-bold ${booking.depositPaid ? "text-emerald-600" : "text-amber-600"}`}
                           >
                             {gbp(booking.depositAmount)}{" "}
-                            {booking.depositPaid ? "\u2713" : ""}
+                            {booking.depositPaid ? "✓" : ""}
                           </p>
                         </div>
                         <div>
@@ -461,10 +475,39 @@ export const MyAccountPage: React.FC = () => {
                             className={`font-bold ${booking.balancePaid ? "text-emerald-600" : "text-slate-700 dark:text-slate-300"}`}
                           >
                             {gbp(booking.balanceAmount)}{" "}
-                            {booking.balancePaid ? "\u2713" : ""}
+                            {booking.balancePaid ? "✓" : ""}
                           </p>
                         </div>
                       </div>
+
+                      {payType && (
+                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/60">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              navigate(`/payment/${booking.id}`, {
+                                state: {
+                                  type: payType,
+                                  amount:
+                                    payType === "deposit"
+                                      ? booking.depositAmount
+                                      : booking.balanceAmount,
+                                  courseTitle: booking.course?.title,
+                                  bookingRef: booking.bookingRef,
+                                },
+                              })
+                            }
+                            className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-colors"
+                          >
+                            <CreditCard className="w-3.5 h-3.5" />
+                            <span>
+                              {payType === "deposit"
+                                ? `Pay deposit ${gbp(booking.depositAmount)}`
+                                : `Pay balance ${gbp(booking.balanceAmount)}`}
+                            </span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })

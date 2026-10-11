@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   PaymentElement,
@@ -12,10 +11,10 @@ import { SEOHead } from "../components/common/SEOHead";
 import { createMyPaymentIntent, PaymentType } from "../data/api/paymentsApi";
 import { fetchMyBookings } from "../data/api/bookingsApi";
 import { useBookingPaymentPolling } from "../data/api/useBookingPaymentPolling";
-
-const stripePromise = loadStripe(
-  "pk_test_51UEkyWBUzRTyeMD9Fucub4QdnGoLv9k8zzOAm4KG77qHGb4K7hGhCywFmvzyPKZKrlQmbjzf2GTe2OEhsO5LpBno00SeoMpNTL",
-);
+import {
+  stripePromise,
+  stripePublishableKeyMissing,
+} from "../data/api/stripeClient";
 
 function gbp(n?: number | string | null) {
   if (n === null || n === undefined || n === "") return "\u2014";
@@ -34,7 +33,7 @@ function ConfirmingScreen() {
     <div className="text-center py-10 space-y-3">
       <Loader2 className="w-8 h-8 text-indigo-600 mx-auto animate-spin" />
       <p className="text-sm text-slate-600 dark:text-slate-300">
-        Confirming your payment
+        Confirming your payment…
       </p>
       <p className="text-xs text-slate-400">
         This can take a few seconds while we hear back from Stripe.
@@ -106,7 +105,7 @@ function TimeoutScreen({
     <div className="text-center space-y-4 py-6">
       <AlertCircle className="w-10 h-10 text-amber-500 mx-auto" />
       <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-        Still confirming\u2026
+        Still confirming…
       </h2>
       <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto">
         Your payment is taking longer than usual to confirm.
@@ -372,6 +371,20 @@ export const PaymentPage: React.FC = () => {
           <div className="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-700/80 shadow-xl">
             {loading ? (
               <div className="h-48 rounded-xl bg-slate-100 dark:bg-slate-900 animate-pulse" />
+            ) : stripePublishableKeyMissing ? (
+              <div className="text-center space-y-4 py-6">
+                <AlertCircle className="w-10 h-10 text-rose-500 mx-auto" />
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Payments are not configured. Set VITE_STRIPE_PUBLISHABLE_KEY
+                  and restart the app.
+                </p>
+                <Link
+                  to="/my-account"
+                  className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
+                >
+                  Go to My Bookings
+                </Link>
+              </div>
             ) : error || !clientSecret || !numericBookingId || !type ? (
               <div className="text-center space-y-4 py-6">
                 <AlertCircle className="w-10 h-10 text-rose-500 mx-auto" />
