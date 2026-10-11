@@ -1,13 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
 import { AlertCircle, ShieldCheck, Loader2 } from "lucide-react";
 import { SEOHead } from "../components/common/SEOHead";
 import { useBookingPaymentPolling } from "../data/api/useBookingPaymentPolling";
-
-const stripePromise = loadStripe(
-  "pk_test_51UEkyWBUzRTyeMD9Fucub4QdnGoLv9k8zzOAm4KG77qHGb4K7hGhCywFmvzyPKZKrlQmbjzf2GTe2OEhsO5LpBno00SeoMpNTL",
-);
+import { stripePromise } from "../data/api/stripeClient";
 
 type Hint = "checking" | "processing" | "failed";
 
@@ -56,7 +52,7 @@ export const PaymentResultPage: React.FC = () => {
       <ResultShell>
         <Loader2 className="w-8 h-8 text-indigo-600 mx-auto animate-spin" />
         <p className="text-sm text-slate-600 dark:text-slate-300 mt-3">
-          Confirming your payment\u2026
+          Confirming your payment…
         </p>
       </ResultShell>
     );

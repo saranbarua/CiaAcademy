@@ -14,7 +14,14 @@ export interface ApiBookingPayment {
 export interface ApiBooking {
   id: number;
   bookingRef: string;
-  status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
+  status:
+    | "PENDING"
+    | "CONFIRMED"
+    | "PAID"
+    | "COMPLETED"
+    | "CANCELLED"
+    | "REFUNDED"
+    | "WAITLISTED";
   totalAmount: number;
   depositAmount: number;
   balanceAmount: number;
