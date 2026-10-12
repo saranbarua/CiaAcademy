@@ -158,9 +158,9 @@ export const Navbar: React.FC = () => {
           >
             <div>
               <img
-                src="/../public/Images/logo.jpeg"
-                alt="UK Flag"
-                className="w-24 h-10 "
+                src="/Images/logo.jpeg"
+                alt="Care International Academy Logo"
+                className="w-24 h-10 object-contain"
               />
             </div>
           </Link>
